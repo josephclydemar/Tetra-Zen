@@ -1,5 +1,5 @@
 # Tetra Zen
-`Tetris Zen` is a desktop app implementation of the classic Tetris game, writen in C and Raylib. This desktop application offers a minimalist design and soothing audio experience, providing a serene and engaging environment for players to enjoy the timeless challenge of block placement.
+`Tetra Zen` is a desktop app implementation of the classic Tetris game, writen in C and Raylib. This desktop application offers a minimalist design and soothing audio experience, providing a serene and engaging environment for players to enjoy the timeless challenge of block placement.
 
 <br>
 
