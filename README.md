@@ -7,7 +7,7 @@
 To build on Windows, you need **GCC** and **Make** installed.      
 
 #### MinGW-W64/GCC
-This is an open source C/C++ toolchain with **GCC** and **Make**. The best way to get **MinGW-W64/GCC** is via the [W64Devkit](https://github.com/skeeto/w64devkit/). Download the w64devkit zip file, unzip it and run `W64Devkit.exe`. that will give you a terminal that is ready to go.      
+This is an open source C/C++ toolchain with **GCC** and **Make**. The best way to get **MinGW-W64/GCC** is via the [W64Devkit](https://github.com/skeeto/w64devkit/). Download the w64devkit zip file, unzip it and run `W64Devkit.exe`. That will give you a terminal that is ready to go.      
 
 
 #### Clone the Repo:
