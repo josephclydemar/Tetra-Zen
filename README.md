@@ -25,7 +25,7 @@ make
 
 
 ### Building on Linux/Ubuntu
-There is no need to install **GCC** and **Make** on Linux/Ubuntu because it already pre-installed.     
+There is no need to install **GCC** and **Make** on Linux/Ubuntu because they're already pre-installed.     
 
 #### Clone the Repo
 ```
