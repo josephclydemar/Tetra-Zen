@@ -21,7 +21,6 @@ BRICK_SRC=src/brick.c
 BRICK_OUT=lib/libbrick.dll
 BRICK_LIBS=-lllist -lqueue -lstack -larena -lblock -lraylib
 
-
 QUEUE_SRC=src/queue.c
 QUEUE_OUT=lib/libqueue.dll
 
@@ -32,10 +31,10 @@ LLIST_SRC=src/llist.c
 LLIST_OUT=lib/libllist.dll
 
 
+
 all: $(MAIN_SRC) libarena.dll libblock.dll libbrick.dll
 	$(CC) $(CC_CONFIG) $(CC_FILTER_FLAG) $(MAIN_SRC) $(CC_INCLUDE) $(MAIN_LIBS) $(CC_LIB) -o $(MAIN_OUT)
 	cp lib/* build/.
-	$(MAIN_OUT)
 
 libbrick.dll: include/brick.h $(BRICK_SRC) libllist.dll libqueue.dll libstack.dll libarena.dll libblock.dll
 	$(CC) $(CC_CONFIG) $(CC_FILTER_FLAG) -shared $(BRICK_SRC) $(CC_INCLUDE) $(BRICK_LIBS) $(CC_LIB) -o $(BRICK_OUT)
@@ -55,8 +54,12 @@ libstack.dll: include/stack.h $(STACK_SRC)
 libllist.dll: include/llist.h $(LLIST_SRC)
 	$(CC) $(CC_CONFIG) $(CC_FILTER_FLAG) -shared $(LLIST_SRC) $(CC_INCLUDE) -o $(LLIST_OUT)
 
+open: $(MAIN_OUT)
+	$(MAIN_OUT)
+
 clean:
 	rm build/* || del build/*
+	rm lib/lib*
 	clear || cls
 	tree /f
 
