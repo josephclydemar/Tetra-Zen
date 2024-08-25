@@ -1,5 +1,5 @@
 CC=gcc
-CC_CONFIG=-g -std=c99
+CC_CONFIG=-g -std=c99 -O3
 CC_INCLUDE=-I include/. -I include/raylib/.
 CC_LIB=-L lib/.
 CC_FILTER_FLAG=-Wall -Werror
