@@ -1,5 +1,6 @@
 #include <stdbool.h>
 
+#include "queue.h"
 #include "raylib.h"
 #include "common.h"
 #include "block.h"
@@ -33,7 +34,7 @@ typedef struct {
     BrickEdge edges;
     BrickType type;
     Block *blocks[4];
-
+    Queue otherBricks;
     Color color;
 } Brick;
 
@@ -46,6 +47,11 @@ typedef struct {
  * @return: Memory address of the created Brick
  * */
 Brick *BrickCreate(BrickType brickType, int orient, int posX, int posY, Color color);
+
+/*
+ * @param brick: Memory address of the Brick
+ * */
+void BrickCollide(Brick *brick);
 
 /*
  * @param brick: Memory address of the Brick to rotate counter-clockwise
@@ -66,5 +72,6 @@ void BrickFall(Brick *brick);
  * @param brick: Memory address of the Brick to draw
  * */
 void BrickDraw(Brick *brick);
+
 
 #endif

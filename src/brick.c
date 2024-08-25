@@ -7,7 +7,7 @@
 #include "block.h"
 #include "brick.h"
 
-
+#define BRICK_BLOCK0_IN_MIDDLE_CONDITION      brick->blocks[0]->pos.x > 0 && brick->blocks[0]->pos.x + 1 < GRID_VERTICAL_LINE_QUANTITY
 
 /* Helper functions */
 void _IBrickOrient(Brick *brick) {
@@ -563,37 +563,50 @@ Brick *BrickCreate(BrickType brickType, int orient, int posX, int posY, Color co
 }
 
 void BrickMoveLeft(Brick *brick) {
-    brick->pos.x--;
-    for(int i = 0; i < 4; i++) {
-        brick->blocks[i]->pos.x--;
+    if(brick->edges.bottom < 45 && brick->edges.left > 0) {
+        brick->pos.x--;
+        for(int i = 0; i < 4; i++) {
+            brick->blocks[i]->pos.x--;
+        }
+        brick->edges.left--;
+        brick->edges.right--;
     }
-    brick->edges.left--;
-    brick->edges.right--;
 }
 
 void BrickMoveRight(Brick *brick) {
-    brick->pos.x++;
-    for(int i = 0; i < 4; i++) {
-        brick->blocks[i]->pos.x++;
+    if(brick->edges.bottom < 45 && brick->edges.right < GRID_VERTICAL_LINE_QUANTITY + 14) {
+        brick->pos.x++;
+        for(int i = 0; i < 4; i++) {
+            brick->blocks[i]->pos.x++;
+        }
+        brick->edges.left++;
+        brick->edges.right++;
     }
-    brick->edges.left++;
-    brick->edges.right++;
 }
 
+/*
+void BrickCollide(Brick *brick) {
+}
+*/
+
 void BrickRotateCCW(Brick *brick) {
-    brick->orient++;
-    if(brick->orient > 3) {
-        brick->orient = 0;
+    if(brick->edges.bottom < 45 && BRICK_BLOCK0_IN_MIDDLE_CONDITION) {
+        brick->orient++;
+        if(brick->orient > 3) {
+            brick->orient = 0;
+        }
+        _BrickOrientByType(brick);
     }
-    _BrickOrientByType(brick);
 }
 
 void BrickRotateCW(Brick *brick) {
-    brick->orient--;
-    if(brick->orient < 0) {
-        brick->orient = 3;
+    if(brick->edges.bottom < 45 && BRICK_BLOCK0_IN_MIDDLE_CONDITION) {
+        brick->orient--;
+        if(brick->orient < 0) {
+            brick->orient = 3;
+        }
+        _BrickOrientByType(brick);
     }
-    _BrickOrientByType(brick);
 }
 
 
@@ -609,26 +622,17 @@ void BrickFall(Brick *brick) {
 
 
 void BrickDraw(Brick *brick) {
-    if(brick->edges.bottom < 45) {
-        if(IsKeyPressed(KEY_A)) {
-            if(brick->edges.left > 0) {
-                BrickMoveLeft(brick);
-            }
-        }
-        else if(IsKeyPressed(KEY_D)) {
-            if(brick->edges.right < GRID_VERTICAL_LINE_QUANTITY + 19) {
-                BrickMoveRight(brick);
-            }
-        }
+    if(IsKeyPressed(KEY_A)) {
+        BrickMoveLeft(brick);
+    }else if(IsKeyPressed(KEY_D)) {
+        BrickMoveRight(brick);
     }
 
-    if(brick->edges.bottom < 45 && brick->blocks[0]->pos.x > 0 && brick->blocks[0]->pos.x + GRID_CELL_SIZE < GRID_VERTICAL_LINE_QUANTITY + 19) {
-        if(IsKeyPressed(KEY_Q)) {
-            BrickRotateCCW(brick);
-        }
-        else if(IsKeyPressed(KEY_E)) {
-            BrickRotateCW(brick);
-        }
+    if(IsKeyPressed(KEY_Q)) {
+        BrickRotateCCW(brick);
+    }
+    else if(IsKeyPressed(KEY_E)) {
+        BrickRotateCW(brick);
     }
 
     for(int i = 0; i < 4; i++) {
