@@ -1,8 +1,7 @@
 CC=gcc
 CFLAGS=-Wall -Werror -g -std=c99 -O3
-LFLAGS=-I include/. -I include/raylib/.
-CC_LIB=-L lib/.
-PLATFORM=
+LFLAGS=-I include/. -I include/raylib/. -L lib/.
+TARGET_PLATFORM=
 
 # Source files
 MAIN_SRC=src/main.c
@@ -40,32 +39,35 @@ LLIST_TARGET=lib/libllist
 
 
 ifeq ($(OS),Windows_NT)
-	PLATFORM=windows
+	TARGET_PLATFORM=windows
 	SHARED_TARGET_EXT=dll
 	MAIN_TARGET_EXT=exe
 else
-	PLATFORM=linux
+	TARGET_PLATFORM=linux
 	SHARED_TARGET_EXT=so
 	MAIN_TARGET_EXT=out
 endif
 
+LFLAGS+=-L lib/$(TARGET_PLATFORM)/.
 
-CC_LIB+=-L lib/$(PLATFORM)/.
+ifeq ($(OS),Windows_NT)
+	LFLAGS+=-Wl,-rpath='${ORIGIN}'
+endif
 
 
 all: $(MAIN_SRC) libarena.$(SHARED_TARGET_EXT) libblock.$(SHARED_TARGET_EXT) libbrick.$(SHARED_TARGET_EXT)
 	@mkdir build
-	$(CC) $(CFLAGS) $(MAIN_SRC) $(LFLAGS) $(MAIN_DEPS) $(CC_LIB) -o $(MAIN_TARGET).$(MAIN_TARGET_EXT)
-	@cp lib/*.$(SHARED_TARGET_EXT) lib/$(PLATFORM)/*.$(SHARED_TARGET_EXT)  build/.
+	$(CC) $(CFLAGS) $(MAIN_SRC) $(LFLAGS) $(MAIN_DEPS) -o $(MAIN_TARGET).$(MAIN_TARGET_EXT)
+	@cp lib/*.$(SHARED_TARGET_EXT) lib/$(TARGET_PLATFORM)/*.$(SHARED_TARGET_EXT)  build/.
 
 libbrick.$(SHARED_TARGET_EXT): $(BRICK_H) $(BRICK_SRC) libllist.$(SHARED_TARGET_EXT) libqueue.$(SHARED_TARGET_EXT) libstack.$(SHARED_TARGET_EXT) libarena.$(SHARED_TARGET_EXT) libblock.$(SHARED_TARGET_EXT)
-	$(CC) $(CFLAGS) -shared $(BRICK_SRC) $(LFLAGS) $(BRICK_DEPS) $(CC_LIB) -o $(BRICK_TARGET).$(SHARED_TARGET_EXT)
+	$(CC) $(CFLAGS) -shared $(BRICK_SRC) $(LFLAGS) $(BRICK_DEPS) -o $(BRICK_TARGET).$(SHARED_TARGET_EXT)
 
 libblock.$(SHARED_TARGET_EXT): $(BLOCK_H) $(BLOCK_SRC) libllist.$(SHARED_TARGET_EXT) libqueue.$(SHARED_TARGET_EXT) libstack.$(SHARED_TARGET_EXT) libarena.$(SHARED_TARGET_EXT)
-	$(CC) $(CFLAGS) -shared $(BLOCK_SRC) $(LFLAGS) $(BLOCK_DEPS) $(CC_LIB) -o $(BLOCK_TARGET).$(SHARED_TARGET_EXT)
+	$(CC) $(CFLAGS) -shared $(BLOCK_SRC) $(LFLAGS) $(BLOCK_DEPS) -o $(BLOCK_TARGET).$(SHARED_TARGET_EXT)
 
 libarena.$(SHARED_TARGET_EXT): $(ARENA_H) $(ARENA_SRC) libllist.$(SHARED_TARGET_EXT) libqueue.$(SHARED_TARGET_EXT) libstack.$(SHARED_TARGET_EXT)
-	$(CC) $(CFLAGS) -shared $(ARENA_SRC) $(LFLAGS) $(ARENA_DEPS) $(CC_LIB) -o $(ARENA_TARGET).$(SHARED_TARGET_EXT)
+	$(CC) $(CFLAGS) -shared $(ARENA_SRC) $(LFLAGS) $(ARENA_DEPS) -o $(ARENA_TARGET).$(SHARED_TARGET_EXT)
 
 libqueue.$(SHARED_TARGET_EXT): $(QUEUE_H) $(QUEUE_SRC)
 	$(CC) $(CFLAGS) -shared $(QUEUE_SRC) $(LFLAGS) -o $(QUEUE_TARGET).$(SHARED_TARGET_EXT)
