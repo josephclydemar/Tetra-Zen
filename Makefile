@@ -80,7 +80,7 @@ open: $(MAIN_TARGET)
 	$(MAIN_TARGET)
 
 clean:
-	rm -rf build | rmdir build
+	rm -rf build || rmdir build
 	rm lib/lib*
 	clear || cls
 
