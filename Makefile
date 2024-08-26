@@ -76,8 +76,8 @@ libstack.$(SHARED_TARGET_EXT): $(STACK_H) $(STACK_SRC)
 libllist.$(SHARED_TARGET_EXT): $(LLIST_H) $(LLIST_SRC)
 	$(CC) $(CFLAGS) -shared $(LLIST_SRC) $(LFLAGS) -o $(LLIST_TARGET).$(SHARED_TARGET_EXT)
 
-open: $(MAIN_TARGET)
-	$(MAIN_TARGET)
+open: $(MAIN_TARGET).$(MAIN_TARGET_EXT)
+	$(MAIN_TARGET).$(MAIN_TARGET_EXT)
 
 clean:
 	rm -rf build || rmdir build
