@@ -4,13 +4,12 @@
 <br>
 
 ### Building on Windows
-To build on Windows, you need **GCC** and **Make** installed.      
+To build on Windows, you will need to have **GCC** and **Make** installed.      
 
 #### MinGW-W64/GCC
-This is an open source C/C++ toolchain with **GCC** and **Make**. The best way to get **MinGW-W64/GCC** is via the [W64Devkit](https://github.com/skeeto/w64devkit/). Download the w64devkit zip file, unzip it and run `W64Devkit.exe`. That will give you a terminal that is ready to go.      
+**MinGW-W64/GCC** is an open-source toolchain for C/C++ that includes **GCC** and **Make**. The recommended method for obtaining **MinGW-W64/GCC** is through the [W64Devkit](https://github.com/skeeto/w64devkit/). Download the **W64Devkit** zip file, extract it, and execute `W64Devkit.exe` to access a pre-configured terminal.              
 
-
-#### Clone the Repo:
+#### Clone the Repository
 ```
 git clone git@github.com:josephclydemar/Tetra-Zen.git
 cd Tetra-Zen
@@ -25,15 +24,15 @@ make
 
 
 ### Building on Linux/Ubuntu
-There is no need to install **GCC** and **Make** on Linux/Ubuntu because they're already pre-installed.     
+On Linux/Ubuntu systems, **GCC** and **Make** are typically pre-installed, so no additional installation is necessary.      
 
-#### Clone the Repo
+#### Clone the Repository
 ```
 git clone git@github.com:josephclydemar/Tetra-Zen.git
 cd Tetra-Zen
 ```
 
-#### Build:
+#### Build
 ```
 make
 ```
@@ -44,10 +43,11 @@ make
 
 
 ### Game Controls
-- Press key `a` to make the block move left
-- Press key `d` to make the block move right
-- Press key `s` to make the block fall
-- Press key `q` to make the block rotate counter-clockwise
-- Press key `e` to make the block rotate clockwise
+- Press the `a` key to move the brick left.
+- Press the `d` key to move the brick right.
+- Press the `s` key to make the brick fall.
+- Press the `q` key to rotate the brick counter-clockwise.
+- Press the `e` key to rotate the brick clockwise.
+
 
 
