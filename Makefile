@@ -2,6 +2,7 @@ CC=gcc
 CFLAGS=-Wall -Werror -g -std=c99 -O3
 LFLAGS=-I include/. -I include/raylib/.
 CC_LIB=-L lib/.
+PLATFORM=
 
 # Source files
 MAIN_SRC=src/main.c
@@ -20,49 +21,67 @@ STACK_H=include/stack.h
 LLIST_H=include/llist.h
 
 # Linked libraries
-MAIN_LIBS=-lllist -lqueue -lstack -larena -lblock -lbrick -lraylib
-BRICK_LIBS=-lllist -lqueue -lstack -larena -lblock -lraylib
-BLOCK_LIBS=-lllist -lqueue -lstack -larena -lraylib
-ARENA_LIBS=-lllist -lqueue -lstack -lraylib
+MAIN_DEPS=-lllist -lqueue -lstack -larena -lblock -lbrick -lraylib
+BRICK_DEPS=-lllist -lqueue -lstack -larena -lblock -lraylib
+BLOCK_DEPS=-lllist -lqueue -lstack -larena -lraylib
+ARENA_DEPS=-lllist -lqueue -lstack -lraylib
 
 # Output files
-MAIN_TARGET=build/main.exe
-BRICK_TARGET=lib/libbrick.dll
-BLOCK_TARGET=lib/libblock.dll
-ARENA_TARGET=lib/libarena.dll
-QUEUE_TARGET=lib/libqueue.dll
-STACK_TARGET=lib/libstack.dll
-LLIST_TARGET=lib/libllist.dll
+SHARED_TARGET_EXT=
+MAIN_TARGET_EXT=
+
+MAIN_TARGET=build/main
+BRICK_TARGET=lib/libbrick
+BLOCK_TARGET=lib/libblock
+ARENA_TARGET=lib/libarena
+QUEUE_TARGET=lib/libqueue
+STACK_TARGET=lib/libstack
+LLIST_TARGET=lib/libllist
 
 
-all: $(MAIN_SRC) libarena.dll libblock.dll libbrick.dll
-	$(CC) $(CFLAGS) $(MAIN_SRC) $(LFLAGS) $(MAIN_LIBS) $(CC_LIB) -o $(MAIN_TARGET)
-	cp lib/* build/.
+ifeq ($(OS),Windows_NT)
+	PLATFORM=windows
+	SHARED_TARGET_EXT=dll
+	MAIN_TARGET_EXT=exe
+else
+	PLATFORM=linux
+	SHARED_TARGET_EXT=so
+	MAIN_TARGET_EXT=out
+endif
 
-libbrick.dll: $(BRICK_H) $(BRICK_SRC) libllist.dll libqueue.dll libstack.dll libarena.dll libblock.dll
-	$(CC) $(CFLAGS) -shared $(BRICK_SRC) $(LFLAGS) $(BRICK_LIBS) $(CC_LIB) -o $(BRICK_TARGET)
 
-libblock.dll: $(BLOCK_H) $(BLOCK_SRC) libllist.dll libqueue.dll libstack.dll libarena.dll
-	$(CC) $(CFLAGS) -shared $(BLOCK_SRC) $(LFLAGS) $(BLOCK_LIBS) $(CC_LIB) -o $(BLOCK_TARGET)
+CC_LIB+=-L lib/$(PLATFORM)/.
 
-libarena.dll: $(ARENA_H) $(ARENA_SRC) libllist.dll libqueue.dll libstack.dll
-	$(CC) $(CFLAGS) -shared $(ARENA_SRC) $(LFLAGS) $(ARENA_LIBS) $(CC_LIB) -o $(ARENA_TARGET)
 
-libqueue.dll: $(QUEUE_H) $(QUEUE_SRC)
-	$(CC) $(CFLAGS) -shared $(QUEUE_SRC) $(LFLAGS) -o $(QUEUE_TARGET)
+all: $(MAIN_SRC) libarena.$(SHARED_TARGET_EXT) libblock.$(SHARED_TARGET_EXT) libbrick.$(SHARED_TARGET_EXT)
+	@mkdir build
+	$(CC) $(CFLAGS) $(MAIN_SRC) $(LFLAGS) $(MAIN_DEPS) $(CC_LIB) -o $(MAIN_TARGET).$(MAIN_TARGET_EXT)
+	@cp lib/*.$(SHARED_TARGET_EXT) lib/$(PLATFORM)/*.$(SHARED_TARGET_EXT)  build/.
 
-libstack.dll: $(STACK_H) $(STACK_SRC)
-	$(CC) $(CFLAGS) -shared $(STACK_SRC) $(LFLAGS) -o $(STACK_TARGET)
+libbrick.$(SHARED_TARGET_EXT): $(BRICK_H) $(BRICK_SRC) libllist.$(SHARED_TARGET_EXT) libqueue.$(SHARED_TARGET_EXT) libstack.$(SHARED_TARGET_EXT) libarena.$(SHARED_TARGET_EXT) libblock.$(SHARED_TARGET_EXT)
+	$(CC) $(CFLAGS) -shared $(BRICK_SRC) $(LFLAGS) $(BRICK_DEPS) $(CC_LIB) -o $(BRICK_TARGET).$(SHARED_TARGET_EXT)
 
-libllist.dll: $(LLIST_H) $(LLIST_SRC)
-	$(CC) $(CFLAGS) -shared $(LLIST_SRC) $(LFLAGS) -o $(LLIST_TARGET)
+libblock.$(SHARED_TARGET_EXT): $(BLOCK_H) $(BLOCK_SRC) libllist.$(SHARED_TARGET_EXT) libqueue.$(SHARED_TARGET_EXT) libstack.$(SHARED_TARGET_EXT) libarena.$(SHARED_TARGET_EXT)
+	$(CC) $(CFLAGS) -shared $(BLOCK_SRC) $(LFLAGS) $(BLOCK_DEPS) $(CC_LIB) -o $(BLOCK_TARGET).$(SHARED_TARGET_EXT)
+
+libarena.$(SHARED_TARGET_EXT): $(ARENA_H) $(ARENA_SRC) libllist.$(SHARED_TARGET_EXT) libqueue.$(SHARED_TARGET_EXT) libstack.$(SHARED_TARGET_EXT)
+	$(CC) $(CFLAGS) -shared $(ARENA_SRC) $(LFLAGS) $(ARENA_DEPS) $(CC_LIB) -o $(ARENA_TARGET).$(SHARED_TARGET_EXT)
+
+libqueue.$(SHARED_TARGET_EXT): $(QUEUE_H) $(QUEUE_SRC)
+	$(CC) $(CFLAGS) -shared $(QUEUE_SRC) $(LFLAGS) -o $(QUEUE_TARGET).$(SHARED_TARGET_EXT)
+
+libstack.$(SHARED_TARGET_EXT): $(STACK_H) $(STACK_SRC)
+	$(CC) $(CFLAGS) -shared $(STACK_SRC) $(LFLAGS) -o $(STACK_TARGET).$(SHARED_TARGET_EXT)
+
+libllist.$(SHARED_TARGET_EXT): $(LLIST_H) $(LLIST_SRC)
+	$(CC) $(CFLAGS) -shared $(LLIST_SRC) $(LFLAGS) -o $(LLIST_TARGET).$(SHARED_TARGET_EXT)
 
 open: $(MAIN_TARGET)
 	$(MAIN_TARGET)
 
 clean:
-	rm build/* || del build/*
+	rm -rf build | rmdir build
 	rm lib/lib*
 	clear || cls
-	tree /f
+
 
