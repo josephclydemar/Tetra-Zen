@@ -7,7 +7,11 @@
 #include "block.h"
 #include "brick.h"
 
+
 #define BRICK_BLOCK0_IN_MIDDLE_CONDITION      brick->blocks[0]->pos.x > 0 && brick->blocks[0]->pos.x + 1 < GRID_VERTICAL_LINE_QUANTITY
+#define BRICK_IS_NOT_LANDED                   brick->edges.bottom < 45
+
+
 
 /* Helper functions */
 void _IBrickOrient(Brick *brick) {
@@ -27,6 +31,7 @@ void _IBrickOrient(Brick *brick) {
 
             brick->edges.left = brick->blocks[0]->pos.x;
             brick->edges.right = brick->blocks[0]->pos.x + GRID_CELL_SIZE;
+            brick->edges.top = brick->blocks[0]->pos.y;
             brick->edges.bottom = brick->blocks[3]->pos.y + GRID_CELL_SIZE;
             break;
         case 1:
@@ -44,6 +49,7 @@ void _IBrickOrient(Brick *brick) {
 
             brick->edges.left = brick->blocks[1]->pos.x;
             brick->edges.right = brick->blocks[3]->pos.x + GRID_CELL_SIZE;
+            brick->edges.top = brick->blocks[0]->pos.y;
             brick->edges.bottom = brick->blocks[0]->pos.y + GRID_CELL_SIZE;
             break;
         case 2:
@@ -61,6 +67,7 @@ void _IBrickOrient(Brick *brick) {
 
             brick->edges.left = brick->blocks[0]->pos.x;
             brick->edges.right = brick->blocks[0]->pos.x + GRID_CELL_SIZE;
+            brick->edges.top = brick->blocks[0]->pos.y;
             brick->edges.bottom = brick->blocks[1]->pos.y + GRID_CELL_SIZE;
             break;
         case 3:
@@ -78,6 +85,7 @@ void _IBrickOrient(Brick *brick) {
 
             brick->edges.left = brick->blocks[3]->pos.x;
             brick->edges.right = brick->blocks[1]->pos.x + GRID_CELL_SIZE;
+            brick->edges.top = brick->blocks[0]->pos.y;
             brick->edges.bottom = brick->blocks[0]->pos.y + GRID_CELL_SIZE;
             break;
     }
@@ -100,6 +108,7 @@ void _TBrickOrient(Brick *brick) {
 
             brick->edges.left = brick->blocks[1]->pos.x;
             brick->edges.right = brick->blocks[2]->pos.x + GRID_CELL_SIZE;
+            brick->edges.top = brick->blocks[0]->pos.y;
             brick->edges.bottom = brick->blocks[3]->pos.y + GRID_CELL_SIZE;
             break;
         case 1:
@@ -117,6 +126,7 @@ void _TBrickOrient(Brick *brick) {
 
             brick->edges.left = brick->blocks[0]->pos.x;
             brick->edges.right = brick->blocks[3]->pos.x + GRID_CELL_SIZE;
+            brick->edges.top = brick->blocks[0]->pos.y;
             brick->edges.bottom = brick->blocks[1]->pos.y + GRID_CELL_SIZE;
             break;
         case 2:
@@ -134,6 +144,7 @@ void _TBrickOrient(Brick *brick) {
 
             brick->edges.left = brick->blocks[2]->pos.x;
             brick->edges.right = brick->blocks[1]->pos.x + GRID_CELL_SIZE;
+            brick->edges.top = brick->blocks[0]->pos.y;
             brick->edges.bottom = brick->blocks[0]->pos.y + GRID_CELL_SIZE;
             break;
         case 3:
@@ -151,6 +162,7 @@ void _TBrickOrient(Brick *brick) {
 
             brick->edges.left = brick->blocks[3]->pos.x;
             brick->edges.right = brick->blocks[0]->pos.x + GRID_CELL_SIZE;
+            brick->edges.top = brick->blocks[0]->pos.y;
             brick->edges.bottom = brick->blocks[2]->pos.y + GRID_CELL_SIZE;
             break;
     }
@@ -173,6 +185,7 @@ void _JBrickOrient(Brick *brick) {
 
             brick->edges.left = brick->blocks[3]->pos.x;
             brick->edges.right = brick->blocks[0]->pos.x + GRID_CELL_SIZE;
+            brick->edges.top = brick->blocks[0]->pos.y;
             brick->edges.bottom = brick->blocks[2]->pos.y + GRID_CELL_SIZE;
             break;
         case 1:
@@ -190,6 +203,7 @@ void _JBrickOrient(Brick *brick) {
 
             brick->edges.left = brick->blocks[1]->pos.x;
             brick->edges.right = brick->blocks[2]->pos.x + GRID_CELL_SIZE;
+            brick->edges.top = brick->blocks[0]->pos.y;
             brick->edges.bottom = brick->blocks[3]->pos.y + GRID_CELL_SIZE;
             break;
         case 2:
@@ -207,6 +221,7 @@ void _JBrickOrient(Brick *brick) {
 
             brick->edges.left = brick->blocks[0]->pos.x;
             brick->edges.right = brick->blocks[3]->pos.x + GRID_CELL_SIZE;
+            brick->edges.top = brick->blocks[0]->pos.y;
             brick->edges.bottom = brick->blocks[1]->pos.y + GRID_CELL_SIZE;
             break;
         case 3:
@@ -224,6 +239,7 @@ void _JBrickOrient(Brick *brick) {
 
             brick->edges.left = brick->blocks[2]->pos.x;
             brick->edges.right = brick->blocks[1]->pos.x + GRID_CELL_SIZE;
+            brick->edges.top = brick->blocks[0]->pos.y;
             brick->edges.bottom = brick->blocks[0]->pos.y + GRID_CELL_SIZE;
             break;
     }
@@ -246,6 +262,7 @@ void _LBrickOrient(Brick *brick) {
 
             brick->edges.left = brick->blocks[0]->pos.x;
             brick->edges.right = brick->blocks[3]->pos.x + GRID_CELL_SIZE;
+            brick->edges.top = brick->blocks[0]->pos.y;
             brick->edges.bottom = brick->blocks[2]->pos.y + GRID_CELL_SIZE;
             break;
         case 1: /* at 90deg */
@@ -263,6 +280,7 @@ void _LBrickOrient(Brick *brick) {
 
             brick->edges.left = brick->blocks[1]->pos.x;
             brick->edges.right = brick->blocks[2]->pos.x + GRID_CELL_SIZE;
+            brick->edges.top = brick->blocks[0]->pos.y;
             brick->edges.bottom = brick->blocks[0]->pos.y + GRID_CELL_SIZE;
             break;
         case 2: /* at 180deg */
@@ -280,6 +298,7 @@ void _LBrickOrient(Brick *brick) {
 
             brick->edges.left = brick->blocks[3]->pos.x;
             brick->edges.right = brick->blocks[0]->pos.x + GRID_CELL_SIZE;
+            brick->edges.top = brick->blocks[0]->pos.y;
             brick->edges.bottom = brick->blocks[1]->pos.y + GRID_CELL_SIZE;
             break;
         case 3: /* at 270deg */
@@ -297,6 +316,7 @@ void _LBrickOrient(Brick *brick) {
 
             brick->edges.left = brick->blocks[2]->pos.x;
             brick->edges.right = brick->blocks[1]->pos.x + GRID_CELL_SIZE;
+            brick->edges.top = brick->blocks[0]->pos.y;
             brick->edges.bottom = brick->blocks[3]->pos.y + GRID_CELL_SIZE;
             break;
     }
@@ -319,6 +339,7 @@ void _SBrickOrient(Brick *brick) {
 
             brick->edges.left = brick->blocks[3]->pos.x;
             brick->edges.right = brick->blocks[1]->pos.x + GRID_CELL_SIZE;
+            brick->edges.top = brick->blocks[0]->pos.y;
             brick->edges.bottom = brick->blocks[2]->pos.y + GRID_CELL_SIZE;
             break;
         case 1:
@@ -336,6 +357,7 @@ void _SBrickOrient(Brick *brick) {
 
             brick->edges.left = brick->blocks[0]->pos.x;
             brick->edges.right = brick->blocks[2]->pos.x + GRID_CELL_SIZE;
+            brick->edges.top = brick->blocks[0]->pos.y;
             brick->edges.bottom = brick->blocks[3]->pos.y + GRID_CELL_SIZE;
             break;
         case 2:
@@ -353,6 +375,7 @@ void _SBrickOrient(Brick *brick) {
 
             brick->edges.left = brick->blocks[1]->pos.x;
             brick->edges.right = brick->blocks[3]->pos.x + GRID_CELL_SIZE;
+            brick->edges.top = brick->blocks[0]->pos.y;
             brick->edges.bottom = brick->blocks[0]->pos.y + GRID_CELL_SIZE;
             break;
         case 3:
@@ -370,6 +393,7 @@ void _SBrickOrient(Brick *brick) {
 
             brick->edges.left = brick->blocks[2]->pos.x;
             brick->edges.right = brick->blocks[0]->pos.x + GRID_CELL_SIZE;
+            brick->edges.top = brick->blocks[0]->pos.y;
             brick->edges.bottom = brick->blocks[1]->pos.y + GRID_CELL_SIZE;
             break;
     }
@@ -392,6 +416,7 @@ void _ZBrickOrient(Brick *brick) {
 
             brick->edges.left = brick->blocks[1]->pos.x;
             brick->edges.right = brick->blocks[3]->pos.x + GRID_CELL_SIZE;
+            brick->edges.top = brick->blocks[0]->pos.y;
             brick->edges.bottom = brick->blocks[2]->pos.y + GRID_CELL_SIZE;
             break;
         case 1:
@@ -409,6 +434,7 @@ void _ZBrickOrient(Brick *brick) {
 
             brick->edges.left = brick->blocks[0]->pos.x;
             brick->edges.right = brick->blocks[2]->pos.x + GRID_CELL_SIZE;
+            brick->edges.top = brick->blocks[0]->pos.y;
             brick->edges.bottom = brick->blocks[1]->pos.y + GRID_CELL_SIZE;
             break;
         case 2:
@@ -426,6 +452,7 @@ void _ZBrickOrient(Brick *brick) {
 
             brick->edges.left = brick->blocks[3]->pos.x;
             brick->edges.right = brick->blocks[1]->pos.x + GRID_CELL_SIZE;
+            brick->edges.top = brick->blocks[0]->pos.y;
             brick->edges.bottom = brick->blocks[0]->pos.y + GRID_CELL_SIZE;
             break;
         case 3:
@@ -443,6 +470,7 @@ void _ZBrickOrient(Brick *brick) {
 
             brick->edges.left = brick->blocks[2]->pos.x;
             brick->edges.right = brick->blocks[0]->pos.x + GRID_CELL_SIZE;
+            brick->edges.top = brick->blocks[0]->pos.y;
             brick->edges.bottom = brick->blocks[3]->pos.y + GRID_CELL_SIZE;
             break;
     }
@@ -478,8 +506,9 @@ void _BrickOrientByType(Brick *brick) {
 /* **************** */
 
 
-Brick *BrickCreate(BrickType brickType, int orient, int posX, int posY, Color color) {
+Brick *BrickCreate(EBrickType brickType, int orient, int posX, int posY, Color color) {
     Brick *newBrick = (Brick*)malloc(sizeof(Brick));
+
     newBrick->orient = orient;
     newBrick->pos.x = posX;
     newBrick->pos.y = posY;
@@ -495,6 +524,7 @@ Brick *BrickCreate(BrickType brickType, int orient, int posX, int posY, Color co
 
             newBrick->edges.left = newBrick->blocks[0]->pos.x;
             newBrick->edges.right = newBrick->blocks[0]->pos.x + GRID_CELL_SIZE;
+            newBrick->edges.top = newBrick->blocks[0]->pos.y;
             newBrick->edges.bottom = newBrick->blocks[3]->pos.y + GRID_CELL_SIZE;
             break;
         case O_BRICK:
@@ -505,6 +535,7 @@ Brick *BrickCreate(BrickType brickType, int orient, int posX, int posY, Color co
 
             newBrick->edges.left = newBrick->blocks[0]->pos.x;
             newBrick->edges.right = newBrick->blocks[1]->pos.x + GRID_CELL_SIZE;
+            newBrick->edges.top = newBrick->blocks[0]->pos.y;
             newBrick->edges.bottom = newBrick->blocks[2]->pos.y + GRID_CELL_SIZE;
             break;
         case T_BRICK:
@@ -515,6 +546,7 @@ Brick *BrickCreate(BrickType brickType, int orient, int posX, int posY, Color co
 
             newBrick->edges.left = newBrick->blocks[1]->pos.x;
             newBrick->edges.right = newBrick->blocks[2]->pos.x + GRID_CELL_SIZE;
+            newBrick->edges.top = newBrick->blocks[0]->pos.y;
             newBrick->edges.bottom = newBrick->blocks[3]->pos.y + GRID_CELL_SIZE;
             break;
         case J_BRICK:
@@ -525,6 +557,7 @@ Brick *BrickCreate(BrickType brickType, int orient, int posX, int posY, Color co
 
             newBrick->edges.left = newBrick->blocks[3]->pos.x;
             newBrick->edges.right = newBrick->blocks[0]->pos.x + GRID_CELL_SIZE;
+            newBrick->edges.top = newBrick->blocks[0]->pos.y;
             newBrick->edges.bottom = newBrick->blocks[2]->pos.y + GRID_CELL_SIZE;
             break;
         case L_BRICK:
@@ -535,6 +568,7 @@ Brick *BrickCreate(BrickType brickType, int orient, int posX, int posY, Color co
 
             newBrick->edges.left = newBrick->blocks[0]->pos.x;
             newBrick->edges.right = newBrick->blocks[3]->pos.x + GRID_CELL_SIZE;
+            newBrick->edges.top = newBrick->blocks[0]->pos.y;
             newBrick->edges.bottom = newBrick->blocks[2]->pos.y + GRID_CELL_SIZE;
             break;
         case S_BRICK:
@@ -545,6 +579,7 @@ Brick *BrickCreate(BrickType brickType, int orient, int posX, int posY, Color co
 
             newBrick->edges.left = newBrick->blocks[3]->pos.x;
             newBrick->edges.right = newBrick->blocks[1]->pos.x + GRID_CELL_SIZE;
+            newBrick->edges.top = newBrick->blocks[0]->pos.y;
             newBrick->edges.bottom = newBrick->blocks[2]->pos.y + GRID_CELL_SIZE;
             break;
         case Z_BRICK:
@@ -555,6 +590,7 @@ Brick *BrickCreate(BrickType brickType, int orient, int posX, int posY, Color co
 
             newBrick->edges.left = newBrick->blocks[1]->pos.x;
             newBrick->edges.right = newBrick->blocks[3]->pos.x + GRID_CELL_SIZE;
+            newBrick->edges.top = newBrick->blocks[0]->pos.y;
             newBrick->edges.bottom = newBrick->blocks[2]->pos.y + GRID_CELL_SIZE;
             break;
     }
@@ -562,8 +598,9 @@ Brick *BrickCreate(BrickType brickType, int orient, int posX, int posY, Color co
     return newBrick;
 }
 
+
 void BrickMoveLeft(Brick *brick) {
-    if(brick->edges.bottom < 45 && brick->edges.left > 0) {
+    if(BRICK_IS_NOT_LANDED && brick->edges.left > 0) {
         brick->pos.x--;
         for(int i = 0; i < 4; i++) {
             brick->blocks[i]->pos.x--;
@@ -574,7 +611,7 @@ void BrickMoveLeft(Brick *brick) {
 }
 
 void BrickMoveRight(Brick *brick) {
-    if(brick->edges.bottom < 45 && brick->edges.right < GRID_VERTICAL_LINE_QUANTITY + 14) {
+    if(BRICK_IS_NOT_LANDED && brick->edges.right < GRID_VERTICAL_LINE_QUANTITY + 14) {
         brick->pos.x++;
         for(int i = 0; i < 4; i++) {
             brick->blocks[i]->pos.x++;
@@ -590,7 +627,7 @@ void BrickCollide(Brick *brick) {
 */
 
 void BrickRotateCCW(Brick *brick) {
-    if(brick->edges.bottom < 45 && BRICK_BLOCK0_IN_MIDDLE_CONDITION) {
+    if(BRICK_IS_NOT_LANDED && BRICK_BLOCK0_IN_MIDDLE_CONDITION) {
         brick->orient++;
         if(brick->orient > 3) {
             brick->orient = 0;
@@ -600,7 +637,7 @@ void BrickRotateCCW(Brick *brick) {
 }
 
 void BrickRotateCW(Brick *brick) {
-    if(brick->edges.bottom < 45 && BRICK_BLOCK0_IN_MIDDLE_CONDITION) {
+    if(BRICK_IS_NOT_LANDED && BRICK_BLOCK0_IN_MIDDLE_CONDITION) {
         brick->orient--;
         if(brick->orient < 0) {
             brick->orient = 3;
@@ -610,14 +647,17 @@ void BrickRotateCW(Brick *brick) {
 }
 
 
-void BrickFall(Brick *brick) {
-    if(brick->edges.bottom < 45) {
+bool BrickFall(Brick *brick) {
+    int i;
+    if(BRICK_IS_NOT_LANDED) {
         brick->pos.y++;
-        for(int i = 0; i < 4; i++) {
+        for(i = 0; i < 4; i++) {
             brick->blocks[i]->pos.y++;
         }
         brick->edges.bottom++;
+        return false;
     }
+    return true;
 }
 
 

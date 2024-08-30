@@ -3,6 +3,7 @@
 #include "queue.h"
 #include "raylib.h"
 #include "common.h"
+#include "arena.h"
 #include "block.h"
 
 
@@ -18,7 +19,7 @@ typedef enum {
     L_BRICK,
     S_BRICK,
     Z_BRICK,
-} BrickType;
+} EBrickType;
 
 
 typedef struct {
@@ -32,7 +33,7 @@ typedef struct {
     int orient;
     VectorInt2 pos;
     BrickEdge edges;
-    BrickType type;
+    EBrickType type;
     Block *blocks[4];
     Queue otherBricks;
     Color color;
@@ -46,7 +47,7 @@ typedef struct {
  * @param color: Color of the brick to create
  * @return: Memory address of the created Brick
  * */
-Brick *BrickCreate(BrickType brickType, int orient, int posX, int posY, Color color);
+Brick *BrickCreate(EBrickType brickType, int orient, int posX, int posY, Color color);
 
 /*
  * @param brick: Memory address of the Brick
@@ -66,7 +67,7 @@ void BrickRotateCW(Brick *brick);
 /*
  * @param brick: Memory address of the Brick to fall
  * */
-void BrickFall(Brick *brick);
+bool BrickFall(Brick *brick);
 
 /*
  * @param brick: Memory address of the Brick to draw
