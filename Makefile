@@ -1,7 +1,9 @@
 CC = gcc
-CFLAGS = -Wall -Werror -g -std=c99 -O3
+CFLAGS = -Wall -Werror -std=c99 -O3
 LFLAGS = -I include/. -I include/raylib/. -L lib/.
-TARGET_PLATFORM = 
+TARGET_PLATFORM =
+EXEC_COMMAND =
+RENAME_COMMAND = 
 
 # Source files
 MAIN_SRC = src/main.c
@@ -42,23 +44,23 @@ ifeq ($(OS),Windows_NT)
 	TARGET_PLATFORM = windows
 	SHARED_TARGET_EXT = dll
 	MAIN_TARGET_EXT = exe
+	EXEC_COMMAND = $(MAIN_TARGET).$(MAIN_TARGET_EXT)
 else
 	TARGET_PLATFORM = linux
 	SHARED_TARGET_EXT = so
 	MAIN_TARGET_EXT = out
+	RENAME_COMMAND = mv build/libraylib.so build/libraylib.so.500
+	EXEC_COMMAND = LD_LIBRARY_PATH=. $(MAIN_TARGET).$(MAIN_TARGET_EXT)
 endif
 
 LFLAGS += -L lib/$(TARGET_PLATFORM)/.
-
-ifneq ($(OS),Windows_NT)
-	LFLAGS += -Wl,-rpath='${ORIGIN}'
-endif
 
 
 all: $(MAIN_SRC) libarena.$(SHARED_TARGET_EXT) libblock.$(SHARED_TARGET_EXT) libbrick.$(SHARED_TARGET_EXT)
 	-@mkdir build
 	$(CC) $(CFLAGS) $(MAIN_SRC) $(LFLAGS) $(MAIN_DEPS) -o $(MAIN_TARGET).$(MAIN_TARGET_EXT)
 	@cp lib/*.$(SHARED_TARGET_EXT) lib/$(TARGET_PLATFORM)/*.$(SHARED_TARGET_EXT)  build/.
+	@strip $(MAIN_TARGET).$(MAIN_TARGET_EXT)
 
 libbrick.$(SHARED_TARGET_EXT): $(BRICK_H) $(BRICK_SRC) libllist.$(SHARED_TARGET_EXT) libqueue.$(SHARED_TARGET_EXT) libstack.$(SHARED_TARGET_EXT) libarena.$(SHARED_TARGET_EXT) libblock.$(SHARED_TARGET_EXT)
 	$(CC) $(CFLAGS) -shared $(BRICK_SRC) $(LFLAGS) $(BRICK_DEPS) -o $(BRICK_TARGET).$(SHARED_TARGET_EXT)
@@ -79,7 +81,7 @@ libllist.$(SHARED_TARGET_EXT): $(LLIST_H) $(LLIST_SRC)
 	$(CC) $(CFLAGS) -shared $(LLIST_SRC) $(LFLAGS) -o $(LLIST_TARGET).$(SHARED_TARGET_EXT)
 
 open: $(MAIN_TARGET).$(MAIN_TARGET_EXT)
-	$(MAIN_TARGET).$(MAIN_TARGET_EXT)
+	$(EXEC_COMMAND)
 
 clean:
 	-rm -rf build || rmdir build
