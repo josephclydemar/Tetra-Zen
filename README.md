@@ -41,8 +41,13 @@ make
 <br>
 <br>
 
+### Usage
+#### Open the Game Window
+```
+make open
+```
 
-### Game Controls
+#### Game Controls
 - Press the `a` key to move the brick left.
 - Press the `d` key to move the brick right.
 - Press the `s` key to make the brick fall.
