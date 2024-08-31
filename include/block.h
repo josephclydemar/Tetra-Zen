@@ -9,6 +9,7 @@
 typedef struct {
     VectorInt2 pos;
     VectorInt2 size;
+    Vector2 highlight[3];
     Color color;
 } Block;
 
