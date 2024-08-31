@@ -16,19 +16,11 @@
 
 int main(void) {
     srand(time(0));
-
-    const Color BrickColors[7] = {
-        YELLOW,
-        RED,
-        VIOLET,
-        BEIGE,
-        BLUE,
-        PINK,
-        GREEN
-    };
-
+    const Color BrickColors[7] = { ORANGE, RED, VIOLET, BEIGE, BLUE, PINK, GREEN };
+    // HA
+    // HU
     Arena *GameArena = CreateArena();
-    GameArena->activeBrick = (void*)BrickCreate(L_BRICK, 0, (int)(GRID_VERTICAL_LINE_QUANTITY / 2), 2, YELLOW);
+    GameArena->activeBrick = (void*)BrickCreate(L_BRICK, 0, (int)(GRID_VERTICAL_LINE_QUANTITY / 2), 2, BrickColors[0]);
     LNode *walker = GameArena->landedBlocks->head;
 
     InitWindow(WINDOW_WIDTH, WINDOW_HEIGHT, "Tetra Zen");
