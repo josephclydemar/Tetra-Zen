@@ -16,7 +16,6 @@
 
 int main(void) {
     srand(time(0));
-    const Color BrickColors[7] = { ORANGE, RED, VIOLET, BEIGE, BLUE, PINK, GREEN };
     // HA
     // HU
     Arena *GameArena = CreateArena();
@@ -32,21 +31,7 @@ int main(void) {
         //----------------------------------------------------------------------------------
         if(clock() > timeInterval) {
             if(BrickFall((Brick*)(GameArena->activeBrick))) {
-                for(int i = 0; i < 4; i++) {
-                    LListInsert(
-                            GameArena->landedBlocks, 
-                            0, 
-                            (void*)(((Brick*)(GameArena->activeBrick))->blocks[i])
-                    );
-                }
-                free((Brick*)(GameArena->activeBrick));
-                GameArena->activeBrick = (void*)BrickCreate(
-                                                        rand() % 7,
-                                                        rand() % 4,
-                                                        rand() % GRID_VERTICAL_LINE_QUANTITY,
-                                                        2,
-                                                        BrickColors[rand() % 7]
-                                                       );
+                BrickLand(GameArena);
             }
             timeInterval = clock() + FALL_TIME_UNIT_INTERVAL;
         }
