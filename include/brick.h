@@ -11,6 +11,8 @@
 #define BRICK_H
 
 
+const Color BrickColors[7] = { ORANGE, RED, VIOLET, BEIGE, BLUE, PINK, GREEN };
+
 typedef enum {
     I_BRICK,
     O_BRICK,
@@ -73,6 +75,11 @@ bool BrickFall(Brick *brick);
  * @param brick: Memory address of the Brick to draw
  * */
 void BrickDraw(Brick *brick);
+
+/*
+ * @param brick: Memory address of the Brick to draw
+ * */
+void BrickLand(Arena *arena);
 
 
 #endif

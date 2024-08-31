@@ -13,7 +13,7 @@
 
 
 
-/* Helper functions */
+/* Internal functions */
 void _IBrickOrient(Brick *brick) {
     switch(brick->orient) {
         case 0:
@@ -503,6 +503,11 @@ void _BrickOrientByType(Brick *brick) {
 }
 
 
+void _BrickDestroy(Brick *brick) {
+    free(brick);
+}
+
+
 /* **************** */
 
 
@@ -678,6 +683,15 @@ void BrickDraw(Brick *brick) {
     for(int i = 0; i < 4; i++) {
         BlockDraw(brick->blocks[i]);
     }
+}
+
+
+void BrickLand(Arena *arena) {
+    for(int i = 0; i < 4; i++) {
+        LListInsert(arena->landedBlocks, 0, (void*)(((Brick*)(arena->activeBrick))->blocks[i]));
+    }
+    _BrickDestroy((Brick*)(arena->activeBrick));
+    arena->activeBrick = (void*)BrickCreate(rand() % 7, rand() % 4, rand() % GRID_VERTICAL_LINE_QUANTITY, 2, BrickColors[rand() % 7]);
 }
 
 
