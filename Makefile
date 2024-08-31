@@ -1,5 +1,5 @@
 CC = gcc
-CFLAGS = -Wall -Werror -std=c99 -O3
+CFLAGS = -Wall -Werror -std=c99 -ggdb
 LFLAGS = -I include/. -I include/raylib/. -L lib/.
 TARGET_PLATFORM =
 EXEC_COMMAND =
@@ -31,7 +31,7 @@ ARENA_DEPS = -lllist -lqueue -lstack -lraylib
 SHARED_TARGET_EXT = 
 MAIN_TARGET_EXT = 
 
-MAIN_TARGET = build/main
+MAIN_TARGET = build/tetra-zen
 BRICK_TARGET = lib/libbrick
 BLOCK_TARGET = lib/libblock
 ARENA_TARGET = lib/libarena
