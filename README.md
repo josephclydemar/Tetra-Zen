@@ -44,7 +44,7 @@ make
 ### Usage
 #### Open the Game Window
 ```
-make open
+make run
 ```
 
 #### Game Controls
