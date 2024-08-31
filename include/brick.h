@@ -11,7 +11,7 @@
 #define BRICK_H
 
 
-const Color BrickColors[7] = { ORANGE, RED, VIOLET, BEIGE, BLUE, PINK, GREEN };
+const Color BRICK_COLORS[7] = { ORANGE, RED, VIOLET, BEIGE, BLUE, PINK, GREEN };
 
 typedef enum {
     I_BRICK,

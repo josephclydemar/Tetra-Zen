@@ -19,7 +19,7 @@ int main(void) {
     // HA
     // HU
     Arena *GameArena = CreateArena();
-    GameArena->activeBrick = (void*)BrickCreate(L_BRICK, 0, (int)(GRID_VERTICAL_LINE_QUANTITY / 2), 2, BrickColors[0]);
+    GameArena->activeBrick = (void*)BrickCreate(L_BRICK, 0, (int)(GRID_VERTICAL_LINE_QUANTITY / 2), 2, BRICK_COLORS[0]);
     LNode *walker = GameArena->landedBlocks->head;
 
     InitWindow(WINDOW_WIDTH, WINDOW_HEIGHT, "Tetra Zen");
