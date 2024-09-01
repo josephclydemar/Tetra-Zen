@@ -57,7 +57,11 @@ endif
 
 ifeq ($(TARGET_BUILD),RELEASE)
 	CFLAGS += -O3
-	SANITIZE_COMMAND += && strip $(MAIN_TARGET).$(MAIN_TARGET_EXT)
+	ifeq ($(OS),Windows_NT)
+		SANITIZE_COMMAND += strip $(MAIN_TARGET).$(MAIN_TARGET_EXT)
+	else
+		SANITIZE_COMMAND += && strip $(MAIN_TARGET).$(MAIN_TARGET_EXT)
+	endif
 else
 	CFLAGS += -ggdb
 endif
