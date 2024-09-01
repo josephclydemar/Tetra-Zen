@@ -11,6 +11,8 @@
 #define BRICK_H
 
 
+#define BRICK_BLOCKS_COUNT      4
+
 const Color BRICK_COLORS[7] = { ORANGE, RED, VIOLET, BEIGE, BLUE, PINK, GREEN };
 
 typedef enum {
@@ -36,7 +38,7 @@ typedef struct {
     VectorInt2 pos;
     BrickEdge edges;
     EBrickType type;
-    Block *blocks[4];
+    Block *blocks[BRICK_BLOCKS_COUNT];
     Queue otherBricks;
     Color color;
 } Brick;
@@ -52,34 +54,19 @@ typedef struct {
 Brick *BrickCreate(EBrickType brickType, int orient, int posX, int posY, Color color);
 
 /*
- * @param brick: Memory address of the Brick
- * */
-void BrickCollide(Brick *brick);
-
-/*
- * @param brick: Memory address of the Brick to rotate counter-clockwise
- * */
-void BrickRotateCCW(Brick *brick);
-
-/*
- * @param brick: Memory address of the Brick to rotate clockwise
- * */
-void BrickRotateCW(Brick *brick);
-
-/*
  * @param brick: Memory address of the Brick to fall
  * */
-bool BrickFall(Brick *brick);
+void BrickCollide(Arena *arena);
+
+/*
+ * @param brick: Memory address of the Brick to drop
+ * */
+void BrickDrop(Arena *arena);
 
 /*
  * @param brick: Memory address of the Brick to draw
  * */
-void BrickDraw(Brick *brick);
-
-/*
- * @param brick: Memory address of the Brick to draw
- * */
-void BrickLand(Arena *arena);
+void BrickDraw(Arena *arena);
 
 
 #endif

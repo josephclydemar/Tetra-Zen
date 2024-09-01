@@ -9,8 +9,6 @@
 
 
 #define BRICK_BLOCK0_IN_MIDDLE_CONDITION      brick->blocks[0]->pos.x > 0 && brick->blocks[0]->pos.x + 1 < GRID_VERTICAL_LINE_QUANTITY
-#define BRICK_IS_NOT_LANDED                   brick->edges.bottom < 45
-
 
 
 /* Internal functions */
@@ -502,13 +500,124 @@ void _BrickOrientByType(Brick *brick) {
     }
 }
 
+void _BrickMoveLeft(Arena *arena) {
+    int i;
+    bool isEqualBlockLeftEdge, isEqualBlockTopEdge;
+    Brick *brick = (Brick*)(arena->activeBrick);
+    LNode *walker = arena->landedBlocks->head;
+
+    while(walker != NULL) {
+        for(i = 0; i < BRICK_BLOCKS_COUNT; i++) {
+            isEqualBlockTopEdge = brick->blocks[i]->pos.y == ((Block*)(walker->data))->pos.y;
+            isEqualBlockLeftEdge = brick->blocks[i]->pos.x == ((Block*)(walker->data))->pos.x + 1;
+            if(isEqualBlockTopEdge && isEqualBlockLeftEdge) return;
+        }
+        walker = walker->next;
+    }
+
+    if(brick->edges.left > 0) {
+        brick->pos.x--;
+        for(i = 0; i < BRICK_BLOCKS_COUNT; i++) {
+            brick->blocks[i]->pos.x--;
+        }
+        brick->edges.left--;
+        brick->edges.right--;
+    }
+}
+
+void _BrickMoveRight(Arena *arena) {
+    int i;
+    bool isEqualBlockRightEdge, isEqualBlockTopEdge;
+    Brick *brick = (Brick*)(arena->activeBrick);
+    LNode *walker = arena->landedBlocks->head;
+
+    while(walker != NULL) {
+        for(i = 0; i < BRICK_BLOCKS_COUNT; i++) {
+            isEqualBlockTopEdge = brick->blocks[i]->pos.y == ((Block*)(walker->data))->pos.y;
+            isEqualBlockRightEdge = brick->blocks[i]->pos.x + 1 == ((Block*)(walker->data))->pos.x;
+            if(isEqualBlockTopEdge && isEqualBlockRightEdge) return;
+        }
+        walker = walker->next;
+    }
+
+    if(brick->edges.right < GRID_VERTICAL_LINE_QUANTITY + 14) {
+        brick->pos.x++;
+        for(i = 0; i < BRICK_BLOCKS_COUNT; i++) {
+            brick->blocks[i]->pos.x++;
+        }
+        brick->edges.left++;
+        brick->edges.right++;
+    }
+}
+
+void _BrickRotateCCW(Arena *arena) {
+    int i;
+    bool isBlock0Collided, isEqualBlockLeftEdge, isEqualBlockRightEdge, isEqualBlockTopEdge;
+    Brick *brick = (Brick*)(arena->activeBrick);
+    LNode *walker = arena->landedBlocks->head;
+
+    while(walker != NULL) {
+        isBlock0Collided = brick->blocks[0]->pos.x == ((Block*)(walker->data))->pos.x + 1 || brick->blocks[0]->pos.x + 1 == ((Block*)(walker->data))->pos.x;
+        for(i = 0; i < BRICK_BLOCKS_COUNT; i++) {
+            isEqualBlockTopEdge = brick->blocks[i]->pos.y == ((Block*)(walker->data))->pos.y;
+            isEqualBlockLeftEdge = brick->blocks[i]->pos.x == ((Block*)(walker->data))->pos.x + 1;
+            isEqualBlockRightEdge = brick->blocks[i]->pos.x + 1 == ((Block*)(walker->data))->pos.x;
+            if(isEqualBlockTopEdge && (isEqualBlockLeftEdge || isEqualBlockRightEdge) && isBlock0Collided) return;
+        }
+        walker = walker->next;
+    }
+
+    if(BRICK_BLOCK0_IN_MIDDLE_CONDITION) {
+        brick->orient++;
+        if(brick->orient > 3) {
+            brick->orient = 0;
+        }
+        _BrickOrientByType(brick);
+    }
+}
+
+void _BrickRotateCW(Arena *arena) {
+    int i;
+    bool isBlock0Collided, isEqualBlockLeftEdge, isEqualBlockRightEdge, isEqualBlockTopEdge;
+    Brick *brick = (Brick*)(arena->activeBrick);
+    LNode *walker = arena->landedBlocks->head;
+
+    while(walker != NULL) {
+        isBlock0Collided = brick->blocks[0]->pos.x == ((Block*)(walker->data))->pos.x + 1 || brick->blocks[0]->pos.x + 1 == ((Block*)(walker->data))->pos.x;
+        for(i = 0; i < BRICK_BLOCKS_COUNT; i++) {
+            isEqualBlockTopEdge = brick->blocks[i]->pos.y == ((Block*)(walker->data))->pos.y;
+            isEqualBlockLeftEdge = brick->blocks[i]->pos.x == ((Block*)(walker->data))->pos.x + 1;
+            isEqualBlockRightEdge = brick->blocks[i]->pos.x + 1 == ((Block*)(walker->data))->pos.x;
+            if(isEqualBlockTopEdge && (isEqualBlockLeftEdge || isEqualBlockRightEdge) && isBlock0Collided) return;
+        }
+        walker = walker->next;
+    }
+
+    if(BRICK_BLOCK0_IN_MIDDLE_CONDITION) {
+        brick->orient--;
+        if(brick->orient < 0) {
+            brick->orient = 3;
+        }
+        _BrickOrientByType(brick);
+    }
+}
 
 void _BrickDestroy(Brick *brick) {
     free(brick);
 }
 
+void _BrickLand(Arena *arena) {
+    for(int i = 0; i < BRICK_BLOCKS_COUNT; i++) {
+        LListInsert(arena->landedBlocks, 0, (void*)(((Brick*)(arena->activeBrick))->blocks[i]));
+    }
+    _BrickDestroy((Brick*)(arena->activeBrick));
+    arena->activeBrick = (void*)BrickCreate(rand() % 7, rand() % 4, rand() % (GRID_VERTICAL_LINE_QUANTITY - 6) + 3, 2, BRICK_COLORS[rand() % 7]);
+}
 
 /* **************** */
+
+
+
 
 
 Brick *BrickCreate(EBrickType brickType, int orient, int posX, int posY, Color color) {
@@ -604,94 +713,51 @@ Brick *BrickCreate(EBrickType brickType, int orient, int posX, int posY, Color c
 }
 
 
-void BrickMoveLeft(Brick *brick) {
-    if(BRICK_IS_NOT_LANDED && brick->edges.left > 0) {
-        brick->pos.x--;
-        for(int i = 0; i < 4; i++) {
-            brick->blocks[i]->pos.x--;
-        }
-        brick->edges.left--;
-        brick->edges.right--;
-    }
-}
-
-void BrickMoveRight(Brick *brick) {
-    if(BRICK_IS_NOT_LANDED && brick->edges.right < GRID_VERTICAL_LINE_QUANTITY + 14) {
-        brick->pos.x++;
-        for(int i = 0; i < 4; i++) {
-            brick->blocks[i]->pos.x++;
-        }
-        brick->edges.left++;
-        brick->edges.right++;
-    }
-}
-
-/*
-void BrickCollide(Brick *brick) {
-}
-*/
-
-void BrickRotateCCW(Brick *brick) {
-    if(BRICK_IS_NOT_LANDED && BRICK_BLOCK0_IN_MIDDLE_CONDITION) {
-        brick->orient++;
-        if(brick->orient > 3) {
-            brick->orient = 0;
-        }
-        _BrickOrientByType(brick);
-    }
-}
-
-void BrickRotateCW(Brick *brick) {
-    if(BRICK_IS_NOT_LANDED && BRICK_BLOCK0_IN_MIDDLE_CONDITION) {
-        brick->orient--;
-        if(brick->orient < 0) {
-            brick->orient = 3;
-        }
-        _BrickOrientByType(brick);
-    }
-}
-
-
-bool BrickFall(Brick *brick) {
+void BrickCollide(Arena *arena) {
     int i;
-    if(BRICK_IS_NOT_LANDED) {
-        brick->pos.y++;
-        for(i = 0; i < 4; i++) {
-            brick->blocks[i]->pos.y++;
-        }
-        brick->edges.bottom++;
-        return false;
+    bool isEqualBlockPosX, isEqualBlockBottom;
+    LNode *walker = arena->landedBlocks->head;
+    
+    for(i = 0; i < BRICK_BLOCKS_COUNT; i++) {
+        if(((Brick*)arena->activeBrick)->edges.bottom > 44) _BrickLand(arena);
     }
-    return true;
+
+    while(walker != NULL) {
+        for(i = 0; i < BRICK_BLOCKS_COUNT; i++) {
+            isEqualBlockPosX = ((Brick*)(arena->activeBrick))->blocks[i]->pos.x == ((Block*)(walker->data))->pos.x;
+            isEqualBlockBottom = ((Brick*)(arena->activeBrick))->blocks[i]->pos.y + 1 == ((Block*)(walker->data))->pos.y;
+            if(isEqualBlockPosX && isEqualBlockBottom) _BrickLand(arena);
+        }
+        walker = walker->next;
+    }
 }
 
 
-void BrickDraw(Brick *brick) {
-    if(IsKeyPressed(KEY_A)) {
-        BrickMoveLeft(brick);
-    }else if(IsKeyPressed(KEY_D)) {
-        BrickMoveRight(brick);
+void BrickDrop(Arena *arena) {
+    int i;
+    Brick *brick = (Brick*)(arena->activeBrick);
+    brick->pos.y++;
+    for(i = 0; i < BRICK_BLOCKS_COUNT; i++) {
+        brick->blocks[i]->pos.y++;
     }
+    brick->edges.bottom++;
+}
 
-    if(IsKeyPressed(KEY_Q)) {
-        BrickRotateCCW(brick);
-    }
-    else if(IsKeyPressed(KEY_E)) {
-        BrickRotateCW(brick);
-    }
 
-    for(int i = 0; i < 4; i++) {
+void BrickDraw(Arena *arena) {
+    Brick *brick = (Brick*)(arena->activeBrick);
+
+    if(IsKeyPressed(KEY_A)) _BrickMoveLeft(arena);
+    else if(IsKeyPressed(KEY_D)) _BrickMoveRight(arena);
+
+    if(IsKeyPressed(KEY_Q)) _BrickRotateCCW(arena);
+    else if(IsKeyPressed(KEY_E)) _BrickRotateCW(arena);
+
+
+    for(int i = 0; i < BRICK_BLOCKS_COUNT; i++) {
         BlockDraw(brick->blocks[i]);
     }
 }
 
-
-void BrickLand(Arena *arena) {
-    for(int i = 0; i < 4; i++) {
-        LListInsert(arena->landedBlocks, 0, (void*)(((Brick*)(arena->activeBrick))->blocks[i]));
-    }
-    _BrickDestroy((Brick*)(arena->activeBrick));
-    arena->activeBrick = (void*)BrickCreate(rand() % 7, rand() % 4, rand() % GRID_VERTICAL_LINE_QUANTITY, 2, BRICK_COLORS[rand() % 7]);
-}
 
 
