@@ -10,8 +10,7 @@
 #include "brick.h"
 
 
-#define FALL_TIME_UNIT_INTERVAL     (clock_t)(CLOCKS_PER_SEC / 2)
-#define BRICK_COUNT                 14
+#define FALL_TIME_UNIT_INTERVAL     (clock_t)(CLOCKS_PER_SEC / 8)
 
 
 int main(void) {
@@ -27,16 +26,15 @@ int main(void) {
     // Main game loop
     while(!WindowShouldClose()) {       // Detect window close button or ESC key
         //----------------------------------------------------------------------------------
+        BrickCollide(GameArena);
         if(clock() > timeInterval) {
-            if(BrickFall((Brick*)(GameArena->activeBrick))) {
-                BrickLand(GameArena);
-            }
+            BrickDrop(GameArena);
             timeInterval = clock() + FALL_TIME_UNIT_INTERVAL;
         }
         BeginDrawing();
         ClearBackground(BLACK);
 
-        BrickDraw((Brick*)(GameArena->activeBrick));
+        BrickDraw(GameArena);
 
         walker = GameArena->landedBlocks->head;
         while(walker != NULL) {
