@@ -10,7 +10,7 @@
 #include "brick.h"
 
 
-#define FALL_TIME_UNIT_INTERVAL     (x)     (clock_t)(CLOCKS_PER_SEC / x)
+#define FALL_TIME_UNIT_INTERVAL(x)     (clock_t)(CLOCKS_PER_SEC / x)
 
 
 int main(void) {
