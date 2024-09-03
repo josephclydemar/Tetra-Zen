@@ -1,9 +1,9 @@
 CC = gcc
 CFLAGS = -Wall -Werror -std=c99
 LFLAGS = -fPIC -I include/. -I include/raylib/. -L lib/.
-TARGET_BUILD = 
+BUILD_MODE = 
 TARGET_PLATFORM =
-EXEC_COMMAND =
+RUN =
 SANITIZE_COMMAND =
 
 # Source files
@@ -45,18 +45,18 @@ ifeq ($(OS),Windows_NT)
 	TARGET_PLATFORM = windows
 	SHARED_TARGET_EXT = dll
 	MAIN_TARGET_EXT = exe
-	EXEC_COMMAND = $(MAIN_TARGET).$(MAIN_TARGET_EXT)
+	RUN = $(MAIN_TARGET).$(MAIN_TARGET_EXT)
 else
 	TARGET_PLATFORM = linux
 	SHARED_TARGET_EXT = so
 	MAIN_TARGET_EXT = out
 	SANITIZE_COMMAND = mv build/libraylib.so build/libraylib.so.500
-	EXEC_COMMAND = LD_LIBRARY_PATH=build/. $(MAIN_TARGET).$(MAIN_TARGET_EXT)
+	RUN = LD_LIBRARY_PATH=build/. $(MAIN_TARGET).$(MAIN_TARGET_EXT)
 endif
 
 
-ifeq ($(TARGET_BUILD),RELEASE)
-	CFLAGS += -O3
+ifeq ($(BUILD_MODE),RELEASE)
+	CFLAGS += -O3 -s
 	ifeq ($(OS),Windows_NT)
 		SANITIZE_COMMAND += strip $(MAIN_TARGET).$(MAIN_TARGET_EXT)
 	else
@@ -95,7 +95,7 @@ libllist.$(SHARED_TARGET_EXT): $(LLIST_H) $(LLIST_SRC)
 	$(CC) $(CFLAGS) -shared $(LLIST_SRC) $(LFLAGS) -o $(LLIST_TARGET).$(SHARED_TARGET_EXT)
 
 run: $(MAIN_TARGET).$(MAIN_TARGET_EXT)
-	$(EXEC_COMMAND)
+	$(RUN)
 
 clean:
 	-rm -rf build || rmdir build
