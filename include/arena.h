@@ -1,3 +1,5 @@
+#include <time.h>
+
 #include "llist.h"
 #include "stack.h"
 
@@ -15,6 +17,7 @@
 
 typedef struct {
     void *activeBrick;
+    clock_t brickFallSpeed;
     LList *landedBlocks;
     Stack *completeLineBlocks;
 } Arena;

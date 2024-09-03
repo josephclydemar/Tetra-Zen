@@ -569,9 +569,9 @@ void _BrickRotateCCW(Arena *arena) {
 
     if(BRICK_BLOCK0_IN_MIDDLE_CONDITION) {
         brick->orient++;
-        if(brick->orient > 3) {
-            brick->orient = 0;
-        }
+        if(brick->orient > 3) brick->orient = 0;
+        else if(brick->orient < 0) brick->orient = 3;
+
         _BrickOrientByType(brick);
     }
 }
@@ -595,9 +595,9 @@ void _BrickRotateCW(Arena *arena) {
 
     if(BRICK_BLOCK0_IN_MIDDLE_CONDITION) {
         brick->orient--;
-        if(brick->orient < 0) {
-            brick->orient = 3;
-        }
+        if(brick->orient < 0) brick->orient = 3;
+        else if(brick->orient > 3) brick->orient = 0;
+
         _BrickOrientByType(brick);
     }
 }
@@ -611,6 +611,7 @@ void _BrickLand(Arena *arena) {
         LListInsert(arena->landedBlocks, 0, (void*)(((Brick*)(arena->activeBrick))->blocks[i]));
     }
     _BrickDestroy((Brick*)(arena->activeBrick));
+    arena->brickFallSpeed = 1;
     arena->activeBrick = (void*)BrickCreate(rand() % 7, rand() % 4, rand() % (GRID_VERTICAL_LINE_QUANTITY - 6) + 3, 2, BRICK_COLORS[rand() % 7]);
 }
 

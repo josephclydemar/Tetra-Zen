@@ -10,7 +10,7 @@
 #include "brick.h"
 
 
-#define FALL_TIME_UNIT_INTERVAL     (clock_t)(CLOCKS_PER_SEC / 8)
+#define FALL_TIME_UNIT_INTERVAL     (x)     (clock_t)(CLOCKS_PER_SEC / x)
 
 
 int main(void) {
@@ -21,15 +21,17 @@ int main(void) {
 
     InitWindow(WINDOW_WIDTH, WINDOW_HEIGHT, "Tetra Zen");
     SetTargetFPS(60);                   // Set our game to run at 60 frames-per-second
-    clock_t timeInterval = clock() + FALL_TIME_UNIT_INTERVAL;
+    clock_t timeInterval = clock() + CLOCKS_PER_SEC;
 
     // Main game loop
     while(!WindowShouldClose()) {       // Detect window close button or ESC key
         //----------------------------------------------------------------------------------
+        if(IsKeyPressed(KEY_SPACE)) GameArena->brickFallSpeed = 128;
+
         BrickCollide(GameArena);
         if(clock() > timeInterval) {
             BrickDrop(GameArena);
-            timeInterval = clock() + FALL_TIME_UNIT_INTERVAL;
+            timeInterval = clock() + FALL_TIME_UNIT_INTERVAL(GameArena->brickFallSpeed);
         }
         BeginDrawing();
         ClearBackground(BLACK);
