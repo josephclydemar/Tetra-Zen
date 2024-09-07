@@ -3,7 +3,6 @@
 
 #include "raylib.h"
 #include "common.h"
-#include "arena.h"
 #include "block.h"
 #include "brick.h"
 
