@@ -499,11 +499,10 @@ void _BrickOrientByType(Brick *brick) {
     }
 }
 
-void _BrickMoveLeft(Arena *arena) {
+void _BrickMoveLeft(Brick *brick, LList *landedBlocks) {
     int i;
     bool isEqualBlockLeftEdge, isEqualBlockTopEdge;
-    Brick *brick = (Brick*)(arena->activeBrick);
-    LNode *walker = arena->landedBlocks->head;
+    LNode *walker = landedBlocks->head;
 
     while(walker != NULL) {
         for(i = 0; i < BRICK_BLOCKS_COUNT; i++) {
@@ -524,11 +523,10 @@ void _BrickMoveLeft(Arena *arena) {
     }
 }
 
-void _BrickMoveRight(Arena *arena) {
+void _BrickMoveRight(Brick *brick, LList *landedBlocks) {
     int i;
     bool isEqualBlockRightEdge, isEqualBlockTopEdge;
-    Brick *brick = (Brick*)(arena->activeBrick);
-    LNode *walker = arena->landedBlocks->head;
+    LNode *walker = landedBlocks->head;
 
     while(walker != NULL) {
         for(i = 0; i < BRICK_BLOCKS_COUNT; i++) {
@@ -549,11 +547,10 @@ void _BrickMoveRight(Arena *arena) {
     }
 }
 
-void _BrickRotateCCW(Arena *arena) {
+void _BrickRotateCCW(Brick *brick, LList *landedBlocks) {
     int i;
     bool isBlock0Collided, isEqualBlockLeftEdge, isEqualBlockRightEdge, isEqualBlockTopEdge;
-    Brick *brick = (Brick*)(arena->activeBrick);
-    LNode *walker = arena->landedBlocks->head;
+    LNode *walker = landedBlocks->head;
 
     while(walker != NULL) {
         isBlock0Collided = brick->blocks[0]->pos.x == ((Block*)(walker->data))->pos.x + 1 || brick->blocks[0]->pos.x + 1 == ((Block*)(walker->data))->pos.x;
@@ -575,11 +572,10 @@ void _BrickRotateCCW(Arena *arena) {
     }
 }
 
-void _BrickRotateCW(Arena *arena) {
+void _BrickRotateCW(Brick *brick, LList *landedBlocks) {
     int i;
     bool isBlock0Collided, isEqualBlockLeftEdge, isEqualBlockRightEdge, isEqualBlockTopEdge;
-    Brick *brick = (Brick*)(arena->activeBrick);
-    LNode *walker = arena->landedBlocks->head;
+    LNode *walker = landedBlocks->head;
 
     while(walker != NULL) {
         isBlock0Collided = brick->blocks[0]->pos.x == ((Block*)(walker->data))->pos.x + 1 || brick->blocks[0]->pos.x + 1 == ((Block*)(walker->data))->pos.x;
@@ -603,15 +599,6 @@ void _BrickRotateCW(Arena *arena) {
 
 void _BrickDestroy(Brick *brick) {
     free(brick);
-}
-
-void _BrickLand(Arena *arena) {
-    for(int i = 0; i < BRICK_BLOCKS_COUNT; i++) {
-        LListInsert(arena->landedBlocks, 0, (void*)(((Brick*)(arena->activeBrick))->blocks[i]));
-    }
-    _BrickDestroy((Brick*)(arena->activeBrick));
-    arena->brickFallSpeed = 1;
-    arena->activeBrick = (void*)BrickCreate(rand() % 7, rand() % 4, rand() % (GRID_VERTICAL_LINE_QUANTITY - 6) + 3, 2, BRICK_COLORS[rand() % 7]);
 }
 
 /* **************** */
@@ -713,29 +700,9 @@ Brick *BrickCreate(EBrickType brickType, int orient, int posX, int posY, Color c
 }
 
 
-void BrickCollide(Arena *arena) {
+
+void BrickDrop(Brick *brick) {
     int i;
-    bool isEqualBlockPosX, isEqualBlockBottom;
-    LNode *walker = arena->landedBlocks->head;
-    
-    for(i = 0; i < BRICK_BLOCKS_COUNT; i++) {
-        if(((Brick*)arena->activeBrick)->edges.bottom > 44) _BrickLand(arena);
-    }
-
-    while(walker != NULL) {
-        for(i = 0; i < BRICK_BLOCKS_COUNT; i++) {
-            isEqualBlockPosX = ((Brick*)(arena->activeBrick))->blocks[i]->pos.x == ((Block*)(walker->data))->pos.x;
-            isEqualBlockBottom = ((Brick*)(arena->activeBrick))->blocks[i]->pos.y + 1 == ((Block*)(walker->data))->pos.y;
-            if(isEqualBlockPosX && isEqualBlockBottom) _BrickLand(arena);
-        }
-        walker = walker->next;
-    }
-}
-
-
-void BrickDrop(Arena *arena) {
-    int i;
-    Brick *brick = (Brick*)(arena->activeBrick);
     brick->pos.y++;
     for(i = 0; i < BRICK_BLOCKS_COUNT; i++) {
         brick->blocks[i]->pos.y++;
@@ -744,14 +711,21 @@ void BrickDrop(Arena *arena) {
 }
 
 
-void BrickDraw(Arena *arena) {
-    Brick *brick = (Brick*)(arena->activeBrick);
+void BrickLand(Brick *brick, LList *landedBlocks) {
+    for(int i = 0; i < BRICK_BLOCKS_COUNT; i++) {
+        LListInsert(landedBlocks, 0, (void*)(brick)->blocks[i]);
+    }
+    _BrickDestroy(brick);
+}
 
-    if(IsKeyPressed(KEY_A)) _BrickMoveLeft(arena);
-    else if(IsKeyPressed(KEY_D)) _BrickMoveRight(arena);
 
-    if(IsKeyPressed(KEY_Q)) _BrickRotateCCW(arena);
-    else if(IsKeyPressed(KEY_E)) _BrickRotateCW(arena);
+void BrickDraw(Brick *brick, LList *landedBlocks) {
+
+    if(IsKeyPressed(KEY_A)) _BrickMoveLeft(brick, landedBlocks);
+    else if(IsKeyPressed(KEY_D)) _BrickMoveRight(brick, landedBlocks);
+
+    if(IsKeyPressed(KEY_Q)) _BrickRotateCCW(brick, landedBlocks);
+    else if(IsKeyPressed(KEY_E)) _BrickRotateCW(brick, landedBlocks);
 
 
     for(int i = 0; i < BRICK_BLOCKS_COUNT; i++) {

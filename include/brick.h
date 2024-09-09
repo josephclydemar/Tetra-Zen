@@ -1,9 +1,8 @@
 #include <stdbool.h>
 
-#include "queue.h"
+#include "llist.h"
 #include "raylib.h"
 #include "common.h"
-#include "arena.h"
 #include "block.h"
 
 
@@ -39,7 +38,6 @@ typedef struct {
     BrickEdge edges;
     EBrickType type;
     Block *blocks[BRICK_BLOCKS_COUNT];
-    Queue otherBricks;
     Color color;
 } Brick;
 
@@ -56,17 +54,17 @@ Brick *BrickCreate(EBrickType brickType, int orient, int posX, int posY, Color c
 /*
  * @param brick: Memory address of the Brick to fall
  * */
-void BrickCollide(Arena *arena);
+void BrickLand(Brick *brick, LList *landedBlocks);
 
 /*
  * @param brick: Memory address of the Brick to drop
  * */
-void BrickDrop(Arena *arena);
+void BrickDrop(Brick *brick);
 
 /*
  * @param brick: Memory address of the Brick to draw
  * */
-void BrickDraw(Arena *arena);
+void BrickDraw(Brick *brick, LList *landedBlocks);
 
 
 #endif
