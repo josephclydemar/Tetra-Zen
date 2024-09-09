@@ -10,12 +10,11 @@
 #include "brick.h"
 
 
-#define FALL_TIME_UNIT_INTERVAL(x)     (clock_t)(CLOCKS_PER_SEC / x)
 
 
 int main(void) {
     srand(time(0));
-    Arena *GameArena = CreateArena();
+    Arena *GameArena = ArenaCreate();
     GameArena->activeBrick = (void*)BrickCreate(L_BRICK, 0, (int)(GRID_VERTICAL_LINE_QUANTITY / 2), 2, BRICK_COLORS[0]);
     LNode *walker = GameArena->landedBlocks->head;
 
@@ -26,17 +25,12 @@ int main(void) {
     // Main game loop
     while(!WindowShouldClose()) {       // Detect window close button or ESC key
         //----------------------------------------------------------------------------------
-        if(IsKeyPressed(KEY_SPACE)) GameArena->brickFallSpeed = 128;
-
-        BrickCollide(GameArena);
-        if(clock() > timeInterval) {
-            BrickDrop(GameArena);
-            timeInterval = clock() + FALL_TIME_UNIT_INTERVAL(GameArena->brickFallSpeed);
-        }
+        timeInterval = ArenaUpdate(GameArena, timeInterval);
+        
         BeginDrawing();
         ClearBackground(BLACK);
 
-        BrickDraw(GameArena);
+        BrickDraw((Brick*)(GameArena->activeBrick), GameArena->landedBlocks);
 
         walker = GameArena->landedBlocks->head;
         while(walker != NULL) {

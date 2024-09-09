@@ -15,7 +15,12 @@ typedef struct {
 } Arena;
 
 
-Arena *CreateArena(void);
+Arena *ArenaCreate(void);
 
+void ArenaActiveBrickLand(Arena *arena);
+
+void ArenaActiveBrickCollide(Arena *arena);
+
+clock_t ArenaSomething(Arena *arena, clock_t timeInterval);
 
 #endif
