@@ -26,7 +26,7 @@ LLIST_H  = include/llist.h
 
 # Linked libraries
 MAIN_DEPS   = -lllist -lqueue -lstack -lcommon -lgame -lblock -lbrick -lraylib
-GAME_DEPS  = -lllist -lqueue -lstack -lbrick -lraylib
+GAME_DEPS  = -lllist -lqueue -lstack -lblock -lbrick -lraylib
 BRICK_DEPS  = -lllist -lqueue -lstack -lblock -lraylib
 BLOCK_DEPS  = -lllist -lqueue -lstack -lraylib
 COMMON_DEPS = -lraylib
