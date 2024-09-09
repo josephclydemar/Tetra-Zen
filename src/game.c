@@ -1,6 +1,7 @@
 #include <time.h>
 #include <stdlib.h>
 
+#include "common.h"
 #include "llist.h"
 #include "stack.h"
 #include "raylib.h"
@@ -14,7 +15,7 @@
 
 Game *GameCreate(void) {
     Game *newGame = (Game*)malloc(sizeof(Game));
-    newGame->activeBrick = NULL;
+    newGame->activeBrick = (void*)BrickCreate(L_BRICK, 0, (int)(GRID_VERTICAL_LINE_QUANTITY / 2), 2, BRICK_COLORS[0]);
     newGame->brickFallSpeed = 1;
     newGame->landedBlocks = CreateLList();
     newGame->completeLineBlocks = CreateStack();
@@ -58,4 +59,16 @@ clock_t GameUpdate(Game *game, clock_t timeInterval) {
         timeInterval = clock() + FALL_TIME_UNIT_INTERVAL(game->brickFallSpeed);
     }
     return timeInterval;
+}
+
+void GameDraw(Game *game) {
+    Brick *activeBrick = (Brick*)(game->activeBrick);
+    LList *landedBlocks = game->landedBlocks;
+    LNode *walker = landedBlocks->head;
+
+    BrickDraw(activeBrick, landedBlocks);
+    while(walker != NULL) {
+        BlockDraw((Block*)(walker->data));
+        walker = walker->next;
+    }
 }
