@@ -48,11 +48,14 @@ make run
 ```
 
 #### Game Controls
-- Press the `a` key to move the brick left.
-- Press the `d` key to move the brick right.
-- Press the `SPACEBAR` key to make the brick drop fast.
-- Press the `q` key to rotate the brick counter-clockwise.
-- Press the `e` key to rotate the brick clockwise.
+- Press the `A` key to rotate the brick counter-clockwise.
+- Press the `D` key to rotate the brick clockwise.
+- Press the `LEFT` key to move left the brick normally.
+- Press the `RIGHT` key to move right the brick normally.
+- Press the `Z` key to move left fast the brick.
+- Press the `C` key to move right fast the brick.
+- Press the `X` key to make the brick drop fast.
+
 
 
 
