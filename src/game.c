@@ -51,7 +51,7 @@ void GameActiveBrickCollide(Game *game) {
 
 
 clock_t GameUpdate(Game *game, clock_t timeInterval) {
-    if(IsKeyPressed(KEY_SPACE)) game->brickFallSpeed = 128;
+    if(IsKeyPressed(KEY_X)) game->brickFallSpeed = 128;
 
     GameActiveBrickCollide(game);
     if(clock() > timeInterval) {

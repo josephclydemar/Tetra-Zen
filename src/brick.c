@@ -721,11 +721,14 @@ void BrickLand(Brick *brick, LList *landedBlocks) {
 
 void BrickDraw(Brick *brick, LList *landedBlocks) {
 
-    if(IsKeyPressed(KEY_A)) _BrickMoveLeft(brick, landedBlocks);
-    else if(IsKeyPressed(KEY_D)) _BrickMoveRight(brick, landedBlocks);
+    if(IsKeyPressed(KEY_LEFT)) _BrickMoveLeft(brick, landedBlocks);
+    else if(IsKeyPressed(KEY_RIGHT)) _BrickMoveRight(brick, landedBlocks);
 
-    if(IsKeyPressed(KEY_Q)) _BrickRotateCCW(brick, landedBlocks);
-    else if(IsKeyPressed(KEY_E)) _BrickRotateCW(brick, landedBlocks);
+    if(IsKeyDown(KEY_Z)) _BrickMoveLeft(brick, landedBlocks);
+    else if(IsKeyDown(KEY_C)) _BrickMoveRight(brick, landedBlocks);
+
+    if(IsKeyPressed(KEY_A)) _BrickRotateCCW(brick, landedBlocks);
+    else if(IsKeyPressed(KEY_D)) _BrickRotateCW(brick, landedBlocks);
 
 
     for(int i = 0; i < BRICK_BLOCKS_COUNT; i++) {
