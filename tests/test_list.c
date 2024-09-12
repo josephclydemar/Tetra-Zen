@@ -102,6 +102,41 @@ void Test_ListCountTwoOnSecondAppend(void) {
 
 
 
+/* ListRemove tests */
+void Test_ListRemoveReturnValueNullOnCreate(void) {
+    List *list = CreateList();
+
+    void *result = ListRemove(list, 0);
+
+    Test(__func__,
+        result == NULL,
+        "Test if the return value of the removed node is equal to NULL");
+    free(list);
+    list = NULL;
+}
+
+void Test_ListRemoveReturnValueNotNullOnFirstRemove(void) {
+    List *list = CreateList();
+
+    int *item1 = (int*)malloc(sizeof(int));
+    *item1 = 4;
+    ListAppend(list, (void*)item1);
+
+    void *result = ListRemove(list, 0);
+
+    Test(__func__,
+        result != NULL,
+        "Test if the return value of the 1st removed node is not equal to NULL");
+    free(list);
+    list = NULL;
+}
+
+
+
+
+
+
+
 int main() {
     printf("\n%s:\n", __FILE__);
     Test_ListCountZeroOnCreate();
@@ -113,5 +148,8 @@ int main() {
     Test_ListTailNotNullOnFirstAppend();
     Test_ListCountTwoOnSecondAppend();
 
+    Test_ListRemoveReturnValueNullOnCreate();
+    Test_ListRemoveReturnValueNotNullOnFirstRemove();
+    
     return 0;
 }
