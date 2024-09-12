@@ -54,7 +54,7 @@ make run
 - Press the `RIGHT` key to move right the brick normally.
 - Press the `Z` key to move left fast the brick.
 - Press the `C` key to move right fast the brick.
-- Press the `X` key to make the brick drop fast.
+- Press the `SPACE` key to make the brick drop fast.
 
 
 
