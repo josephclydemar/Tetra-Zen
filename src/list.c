@@ -1,4 +1,3 @@
-#include <assert.h>
 #include <stdlib.h>
 #include <stdbool.h>
 #include <stdio.h>
@@ -27,10 +26,6 @@ bool ListAppend(List *list, void *item) {
         list->tail = newLNode;
         list->count++;
     }
-    
-    assert(list->head != NULL);
-    assert(list->tail != NULL);
-    assert(list->count > 0);
 
     LNode *newLNode = CreateLNode(list->count, item);
     list->tail->next = newLNode;
@@ -40,8 +35,9 @@ bool ListAppend(List *list, void *item) {
 }
 
 void *ListRemove(List *list, int id) {
-    assert(id > -1);
-    assert(id < list->count);
+    if(id < 0) return NULL;
+    if(list->head == NULL) return NULL;
+    if(id > list->count - 1) return NULL;
 
     if(list->count == 0 && list->head == NULL && list->tail == NULL) {
         return NULL;
