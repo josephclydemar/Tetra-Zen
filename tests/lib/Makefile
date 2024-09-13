@@ -2,24 +2,21 @@ CC = gcc
 CFLAGS = -Wall -Werror -std=c99 -s -O3
 LFLAGS = -I include/. -fPIC
 
-SHARED_TARGET_EXT =
-MAIN_TARGET_EXT =
+TARGET_EXT =
 
-SRC = src/testing.c
-TARGET = ../bin/libtesting
 
 ifeq ($(OS),Windows_NT)
-	SHARED_TARGET_EXT = dll
-	MAIN_TARGET_EXT = exe
+	TARGET_EXT = dll
 else
-	SHARED_TARGET_EXT = so
-	MAIN_TARGET_EXT = out
+	TARGET_EXT = so
 endif
 
+SRC = src/testing.c
+TARGET = ../bin/libtesting.$(TARGET_EXT)
 
 all:
-	$(CC) $(CFLAGS) $(LFLAGS) -shared $(SRC) -o $(TARGET).$(SHARED_TARGET_EXT)
+	$(CC) $(CFLAGS) $(LFLAGS) -shared $(SRC) -o $(TARGET)
 
 
 clean:
-	-rm ../bin/*.$(SHARED_TARGET_EXT) ../bin/*.$(MAIN_TARGET_EXT)
+	-rm ../bin/*.$(TARGET_EXT)
