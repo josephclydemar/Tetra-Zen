@@ -2,7 +2,7 @@
 #include <stdlib.h>
 
 #include "common.h"
-#include "llist.h"
+#include "list.h"
 #include "stack.h"
 #include "raylib.h"
 #include "block.h"
@@ -17,7 +17,7 @@ Game *GameCreate(void) {
     Game *newGame = (Game*)malloc(sizeof(Game));
     newGame->activeBrick = (void*)BrickCreate(L_BRICK, 0, (int)(GRID_VERTICAL_LINE_QUANTITY / 2), 2, BRICK_COLORS[0]);
     newGame->brickFallSpeed = 1;
-    newGame->landedBlocks = CreateLList();
+    newGame->landedBlocks = CreateList();
     newGame->completeLineBlocks = CreateStack();
     return newGame;
 }
@@ -34,7 +34,7 @@ void GameActiveBrickCollide(Game *game) {
     int i;
     bool isEqualBlockPosX, isEqualBlockBottom;
     Brick *activeBrick = (Brick*)(game->activeBrick);
-    LList *landedBlocks = game->landedBlocks;
+    List *landedBlocks = game->landedBlocks;
     LNode *walker = landedBlocks->head;
     
     if(activeBrick->edges.bottom > 44) GameActiveBrickLand(game);
@@ -63,7 +63,7 @@ clock_t GameUpdate(Game *game, clock_t timeInterval) {
 
 void GameDraw(Game *game) {
     Brick *activeBrick = (Brick*)(game->activeBrick);
-    LList *landedBlocks = game->landedBlocks;
+    List *landedBlocks = game->landedBlocks;
     LNode *walker = landedBlocks->head;
 
     BrickDraw(activeBrick, landedBlocks);

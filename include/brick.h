@@ -1,6 +1,6 @@
 #include <stdbool.h>
 
-#include "llist.h"
+#include "list.h"
 #include "raylib.h"
 #include "common.h"
 #include "block.h"
@@ -54,7 +54,7 @@ Brick *BrickCreate(EBrickType brickType, int orient, int posX, int posY, Color c
 /*
  * @param brick: Memory address of the Brick to fall
  * */
-void BrickLand(Brick *brick, LList *landedBlocks);
+void BrickLand(Brick *brick, List *landedBlocks);
 
 /*
  * @param brick: Memory address of the Brick to drop
@@ -64,7 +64,7 @@ void BrickDrop(Brick *brick);
 /*
  * @param brick: Memory address of the Brick to draw
  * */
-void BrickDraw(Brick *brick, LList *landedBlocks);
+void BrickDraw(Brick *brick, List *landedBlocks);
 
 
 #endif

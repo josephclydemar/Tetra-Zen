@@ -499,7 +499,7 @@ void _BrickOrientByType(Brick *brick) {
     }
 }
 
-void _BrickMoveLeft(Brick *brick, LList *landedBlocks) {
+void _BrickMoveLeft(Brick *brick, List *landedBlocks) {
     int i;
     bool isEqualBlockLeftEdge, isEqualBlockTopEdge;
     LNode *walker = landedBlocks->head;
@@ -523,7 +523,7 @@ void _BrickMoveLeft(Brick *brick, LList *landedBlocks) {
     }
 }
 
-void _BrickMoveRight(Brick *brick, LList *landedBlocks) {
+void _BrickMoveRight(Brick *brick, List *landedBlocks) {
     int i;
     bool isEqualBlockRightEdge, isEqualBlockTopEdge;
     LNode *walker = landedBlocks->head;
@@ -547,7 +547,7 @@ void _BrickMoveRight(Brick *brick, LList *landedBlocks) {
     }
 }
 
-void _BrickRotateCCW(Brick *brick, LList *landedBlocks) {
+void _BrickRotateCCW(Brick *brick, List *landedBlocks) {
     int i;
     bool isBlock0Collided, isEqualBlockLeftEdge, isEqualBlockRightEdge, isEqualBlockTopEdge;
     LNode *walker = landedBlocks->head;
@@ -572,7 +572,7 @@ void _BrickRotateCCW(Brick *brick, LList *landedBlocks) {
     }
 }
 
-void _BrickRotateCW(Brick *brick, LList *landedBlocks) {
+void _BrickRotateCW(Brick *brick, List *landedBlocks) {
     int i;
     bool isBlock0Collided, isEqualBlockLeftEdge, isEqualBlockRightEdge, isEqualBlockTopEdge;
     LNode *walker = landedBlocks->head;
@@ -711,15 +711,15 @@ void BrickDrop(Brick *brick) {
 }
 
 
-void BrickLand(Brick *brick, LList *landedBlocks) {
+void BrickLand(Brick *brick, List *landedBlocks) {
     for(int i = 0; i < BRICK_BLOCKS_COUNT; i++) {
-        LListInsert(landedBlocks, 0, (void*)(brick)->blocks[i]);
+        ListAppend(landedBlocks, (void*)(brick)->blocks[i]);
     }
     _BrickDestroy(brick);
 }
 
 
-void BrickDraw(Brick *brick, LList *landedBlocks) {
+void BrickDraw(Brick *brick, List *landedBlocks) {
 
     if(IsKeyPressed(KEY_LEFT)) _BrickMoveLeft(brick, landedBlocks);
     else if(IsKeyPressed(KEY_RIGHT)) _BrickMoveRight(brick, landedBlocks);

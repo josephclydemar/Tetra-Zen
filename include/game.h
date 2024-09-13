@@ -1,6 +1,6 @@
 #include <time.h>
 
-#include "llist.h"
+#include "list.h"
 #include "stack.h"
 
 #ifndef GAME_H
@@ -10,7 +10,7 @@
 typedef struct {
     void *activeBrick;
     clock_t brickFallSpeed;
-    LList *landedBlocks;
+    List *landedBlocks;
     Stack *completeLineBlocks;
 } Game;
 
