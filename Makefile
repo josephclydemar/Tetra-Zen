@@ -9,7 +9,7 @@ TEST_LIST_RUN =
 TEST_STACK_RUN = 
 TEST_QUEUE_RUN =
 
-SANITIZE_COMMAND =
+CONFIG_COMMAND =
 
 # Output File Extensions
 SHARED_TARGET_EXT = 
@@ -56,6 +56,7 @@ else
 	TARGET_PLATFORM = linux
 	SHARED_TARGET_EXT = so
 	MAIN_TARGET_EXT = out
+	CONFIG_COMMAND = mv build/libraylib.so build/libraylib.so.500
 endif
 
 ifeq ($(BUILD_MODE),DEBUG)
@@ -101,6 +102,7 @@ all: $(MAIN_TARGET)
 $(MAIN_TARGET): $(MAIN_SRC) $(GAME_TARGET)
 	$(CC) $(CFLAGS) $(MAIN_SRC) $(LFLAGS) $(MAIN_DEPS) -o $@
 	@cp lib/$(TARGET_PLATFORM)/*.$(SHARED_TARGET_EXT)  build/.
+	@$(CONFIG_COMMAND)
 
 
 $(GAME_TARGET): $(GAME_H) $(GAME_SRC) $(BRICK_TARGET)
