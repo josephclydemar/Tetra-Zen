@@ -12,6 +12,7 @@ TEST_QUEUE_RUN =
 CONFIG_COMMAND =
 
 # Output File Extensions
+OBJ_TARGET_EXT = o
 SHARED_TARGET_EXT = 
 MAIN_TARGET_EXT = 
 
@@ -40,10 +41,10 @@ TEST_QUEUE_SRC = tests/test_queue.c
 
 
 # Linked libraries
-MAIN_DEPS   = -llist -lqueue -lstack -lcommon -lgame -lblock -lbrick -lraylib
-GAME_DEPS  = -llist -lqueue -lstack -lblock -lbrick -lraylib
-BRICK_DEPS  = -llist -lqueue -lstack -lblock -lraylib
-BLOCK_DEPS  = -llist -lqueue -lstack -lraylib
+MAIN_DEPS   = -lraylib
+GAME_DEPS   = -lraylib
+BRICK_DEPS  = -lraylib
+BLOCK_DEPS  = -lraylib
 COMMON_DEPS = -lraylib
 
 
@@ -60,7 +61,7 @@ else
 endif
 
 ifeq ($(BUILD_MODE),DEBUG)
-	CFLAGS += -ggdb
+	CFLAGS += -g
 else
 	CFLAGS += -O3 -s
 endif
@@ -69,13 +70,13 @@ LFLAGS += -L lib/$(TARGET_PLATFORM)/.
 
 
 MAIN_TARGET   = build/tetra-zen.$(MAIN_TARGET_EXT)
-GAME_TARGET  = build/libgame.$(SHARED_TARGET_EXT)
-BRICK_TARGET  = build/libbrick.$(SHARED_TARGET_EXT)
-BLOCK_TARGET  = build/libblock.$(SHARED_TARGET_EXT)
-COMMON_TARGET = build/libcommon.$(SHARED_TARGET_EXT)
-QUEUE_TARGET  = build/libqueue.$(SHARED_TARGET_EXT)
-STACK_TARGET  = build/libstack.$(SHARED_TARGET_EXT)
-LIST_TARGET  = build/liblist.$(SHARED_TARGET_EXT)
+GAME_TARGET  = build/game.$(OBJ_TARGET_EXT)
+BRICK_TARGET  = build/brick.$(OBJ_TARGET_EXT)
+BLOCK_TARGET  = build/block.$(OBJ_TARGET_EXT)
+COMMON_TARGET = build/common.$(OBJ_TARGET_EXT)
+QUEUE_TARGET  = build/queue.$(OBJ_TARGET_EXT)
+STACK_TARGET  = build/stack.$(OBJ_TARGET_EXT)
+LIST_TARGET  = build/list.$(OBJ_TARGET_EXT)
 
 TEST_LIST_TARGET = tests/bin/test_list.$(MAIN_TARGET_EXT)
 TEST_STACK_TARGET = tests/bin/test_stack.$(MAIN_TARGET_EXT)
@@ -100,37 +101,37 @@ all: $(MAIN_TARGET)
 
 
 $(MAIN_TARGET): $(MAIN_SRC) $(GAME_TARGET)
-	$(CC) $(CFLAGS) $(MAIN_SRC) $(LFLAGS) $(MAIN_DEPS) -o $@
+	$(CC) $(CFLAGS) $(MAIN_SRC) build/*.o $(LFLAGS) $(MAIN_DEPS) -o $@
 	@cp lib/$(TARGET_PLATFORM)/*.$(SHARED_TARGET_EXT)  build/.
 	@$(CONFIG_COMMAND)
 
 
 $(GAME_TARGET): $(GAME_H) $(GAME_SRC) $(BRICK_TARGET)
-	$(CC) $(CFLAGS) -shared $(GAME_SRC) $(LFLAGS) $(GAME_DEPS) -o $@
+	$(CC) $(CFLAGS) -c $(GAME_SRC) $(LFLAGS) $(GAME_DEPS) -o $@
 
 
 $(BRICK_TARGET): $(BRICK_H) $(BRICK_SRC) $(BLOCK_TARGET)
-	$(CC) $(CFLAGS) -shared $(BRICK_SRC) $(LFLAGS) $(BRICK_DEPS) -o $@
+	$(CC) $(CFLAGS) -c $(BRICK_SRC) $(LFLAGS) $(BRICK_DEPS) -o $@
 
 
 $(BLOCK_TARGET): $(BLOCK_H) $(BLOCK_SRC) $(LIST_TARGET) $(QUEUE_TARGET) $(STACK_TARGET) $(COMMON_TARGET)
-	$(CC) $(CFLAGS) -shared $(BLOCK_SRC) $(LFLAGS) $(BLOCK_DEPS) -o $@
+	$(CC) $(CFLAGS) -c $(BLOCK_SRC) $(LFLAGS) $(BLOCK_DEPS) -o $@
 
 
 $(COMMON_TARGET): $(COMMON_H) $(COMMON_SRC)
-	$(CC) $(CFLAGS) -shared $(COMMON_SRC) $(LFLAGS) $(COMMON_DEPS) -o $@
+	$(CC) $(CFLAGS) -c $(COMMON_SRC) $(LFLAGS) $(COMMON_DEPS) -o $@
 
 
 $(QUEUE_TARGET): $(QUEUE_H) $(QUEUE_SRC)
-	$(CC) $(CFLAGS) -shared $(QUEUE_SRC) $(LFLAGS) -o $@
+	$(CC) $(CFLAGS) -c $(QUEUE_SRC) $(LFLAGS) -o $@
 
 
 $(STACK_TARGET): $(STACK_H) $(STACK_SRC)
-	$(CC) $(CFLAGS) -shared $(STACK_SRC) $(LFLAGS) -o $@
+	$(CC) $(CFLAGS) -c $(STACK_SRC) $(LFLAGS) -o $@
 
 
 $(LIST_TARGET): $(LIST_H) $(LIST_SRC)
-	$(CC) $(CFLAGS) -shared $(LIST_SRC) $(LFLAGS) -o $@
+	$(CC) $(CFLAGS) -c $(LIST_SRC) $(LFLAGS) -o $@
 
 
 
@@ -160,7 +161,7 @@ test: test_list test_stack test_queue
 
 
 clean:
-	-rm build/*.$(SHARED_TARGET_EXT) build/*.$(MAIN_TARGET_EXT)
+	-rm build/*.$(SHARED_TARGET_EXT) build/*.$(OBJ_TARGET_EXT) build/*.$(MAIN_TARGET_EXT)
 	clear || cls
 
 
