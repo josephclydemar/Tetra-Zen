@@ -1,10 +1,12 @@
+
+
+#ifndef GAME_H
+#define GAME_H
+
 #include <time.h>
 
 #include "list.h"
 #include "stack.h"
-
-#ifndef GAME_H
-#define GAME_H
 
 
 typedef struct {

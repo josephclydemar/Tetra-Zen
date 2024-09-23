@@ -1,9 +1,10 @@
-#include "raylib.h"
-#include "common.h"
 
 
 #ifndef BLOCK_H
 #define BLOCK_H
+
+#include "raylib.h"
+#include "common.h"
 
 
 typedef struct {

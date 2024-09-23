@@ -1,7 +1,10 @@
-#include <stdbool.h>
+
 
 #ifndef LIST_H
 #define LIST_H
+
+#include <stdbool.h>
+
 
 typedef struct LNode {
     int id;

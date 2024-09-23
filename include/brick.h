@@ -1,18 +1,18 @@
-#include <stdbool.h>
 
+#ifndef BRICK_H
+#define BRICK_H
+
+#include <stdbool.h>
 #include "list.h"
 #include "raylib.h"
 #include "common.h"
 #include "block.h"
 
-
-#ifndef BRICK_H
-#define BRICK_H
-
-
 #define BRICK_BLOCKS_COUNT      4
 
-const Color BRICK_COLORS[7] = { ORANGE, RED, VIOLET, BEIGE, BLUE, PINK, GREEN };
+
+static const Color BRICK_COLORS[7] = { ORANGE, RED, VIOLET, BEIGE, BLUE, PINK, GREEN };
+
 
 typedef enum {
     I_BRICK,
