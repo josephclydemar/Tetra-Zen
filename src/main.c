@@ -9,7 +9,7 @@
 
 int main(void) {
     srand(time(0));
-    Game *game = GameCreate();
+    Game* game = GameCreate();
 
     InitWindow(WINDOW_WIDTH, WINDOW_HEIGHT, "Tetra Zen");
     SetTargetFPS(60);                   // Set our game to run at 60 frames-per-second

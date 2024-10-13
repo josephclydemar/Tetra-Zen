@@ -11,7 +11,7 @@
 
 
 /* Internal functions */
-void _IBrickOrient(Brick *brick) {
+void _IBrickOrient(Brick* brick) {
     switch(brick->orient) {
         case 0:
             brick->blocks[0]->pos.x = brick->pos.x;
@@ -88,7 +88,7 @@ void _IBrickOrient(Brick *brick) {
     }
 }
 
-void _TBrickOrient(Brick *brick) {
+void _TBrickOrient(Brick* brick) {
     switch(brick->orient) {
         case 0:
             brick->blocks[0]->pos.x = brick->pos.x;
@@ -165,7 +165,7 @@ void _TBrickOrient(Brick *brick) {
     }
 }
 
-void _JBrickOrient(Brick *brick) {
+void _JBrickOrient(Brick* brick) {
     switch(brick->orient) {
         case 0:
             brick->blocks[0]->pos.x = brick->pos.x;
@@ -242,7 +242,7 @@ void _JBrickOrient(Brick *brick) {
     }
 }
 
-void _LBrickOrient(Brick *brick) {
+void _LBrickOrient(Brick* brick) {
     switch(brick->orient) {
         case 0: /* at 0deg */
             brick->blocks[0]->pos.x = brick->pos.x;
@@ -319,7 +319,7 @@ void _LBrickOrient(Brick *brick) {
     }
 }
 
-void _SBrickOrient(Brick *brick) {
+void _SBrickOrient(Brick* brick) {
     switch(brick->orient) {
         case 0:
             brick->blocks[0]->pos.x = brick->pos.x;
@@ -396,7 +396,7 @@ void _SBrickOrient(Brick *brick) {
     }
 }
 
-void _ZBrickOrient(Brick *brick) {
+void _ZBrickOrient(Brick* brick) {
     switch(brick->orient) {
         case 0:
             brick->blocks[0]->pos.x = brick->pos.x;
@@ -474,7 +474,7 @@ void _ZBrickOrient(Brick *brick) {
 }
 
 
-void _BrickOrientByType(Brick *brick) {
+void _BrickOrientByType(Brick* brick) {
     switch(brick->type) {
         case I_BRICK:
             _IBrickOrient(brick);
@@ -499,10 +499,10 @@ void _BrickOrientByType(Brick *brick) {
     }
 }
 
-void _BrickMoveLeft(Brick *brick, List *landedBlocks) {
+void _BrickMoveLeft(Brick* brick, List* landedBlocks) {
     int i;
     bool isEqualBlockLeftEdge, isEqualBlockTopEdge;
-    LNode *walker = landedBlocks->head;
+    LNode* walker = landedBlocks->head;
 
     while(walker != NULL) {
         for(i = 0; i < BRICK_BLOCKS_COUNT; i++) {
@@ -523,10 +523,10 @@ void _BrickMoveLeft(Brick *brick, List *landedBlocks) {
     }
 }
 
-void _BrickMoveRight(Brick *brick, List *landedBlocks) {
+void _BrickMoveRight(Brick* brick, List* landedBlocks) {
     int i;
     bool isEqualBlockRightEdge, isEqualBlockTopEdge;
-    LNode *walker = landedBlocks->head;
+    LNode* walker = landedBlocks->head;
 
     while(walker != NULL) {
         for(i = 0; i < BRICK_BLOCKS_COUNT; i++) {
@@ -547,10 +547,10 @@ void _BrickMoveRight(Brick *brick, List *landedBlocks) {
     }
 }
 
-void _BrickRotateCCW(Brick *brick, List *landedBlocks) {
+void _BrickRotateCCW(Brick* brick, List* landedBlocks) {
     int i;
     bool isBlock0Collided, isEqualBlockLeftEdge, isEqualBlockRightEdge, isEqualBlockTopEdge;
-    LNode *walker = landedBlocks->head;
+    LNode* walker = landedBlocks->head;
 
     while(walker != NULL) {
         isBlock0Collided = brick->blocks[0]->pos.x == ((Block*)(walker->data))->pos.x + 1 || brick->blocks[0]->pos.x + 1 == ((Block*)(walker->data))->pos.x;
@@ -572,10 +572,10 @@ void _BrickRotateCCW(Brick *brick, List *landedBlocks) {
     }
 }
 
-void _BrickRotateCW(Brick *brick, List *landedBlocks) {
+void _BrickRotateCW(Brick* brick, List* landedBlocks) {
     int i;
     bool isBlock0Collided, isEqualBlockLeftEdge, isEqualBlockRightEdge, isEqualBlockTopEdge;
-    LNode *walker = landedBlocks->head;
+    LNode* walker = landedBlocks->head;
 
     while(walker != NULL) {
         isBlock0Collided = brick->blocks[0]->pos.x == ((Block*)(walker->data))->pos.x + 1 || brick->blocks[0]->pos.x + 1 == ((Block*)(walker->data))->pos.x;
@@ -597,18 +597,18 @@ void _BrickRotateCW(Brick *brick, List *landedBlocks) {
     }
 }
 
-void _BrickDestroy(Brick *brick) {
+void _BrickDestroy(Brick* brick) {
     free(brick);
 }
 
-/* **************** */
+/* ***************** */
 
 
 
 
 
-Brick *BrickCreate(EBrickType brickType, int orient, int posX, int posY, Color color) {
-    Brick *newBrick = (Brick*)malloc(sizeof(Brick));
+Brick* BrickCreate(EBrickType brickType, int orient, int posX, int posY, Color color) {
+    Brick* newBrick = (Brick*)malloc(sizeof(Brick));
 
     newBrick->orient = orient;
     newBrick->pos.x = posX;
@@ -701,7 +701,7 @@ Brick *BrickCreate(EBrickType brickType, int orient, int posX, int posY, Color c
 
 
 
-void BrickDrop(Brick *brick) {
+void BrickDrop(Brick* brick) {
     int i;
     brick->pos.y++;
     for(i = 0; i < BRICK_BLOCKS_COUNT; i++) {
@@ -711,7 +711,7 @@ void BrickDrop(Brick *brick) {
 }
 
 
-void BrickLand(Brick *brick, List *landedBlocks) {
+void BrickLand(Brick* brick, List* landedBlocks) {
     for(int i = 0; i < BRICK_BLOCKS_COUNT; i++) {
         ListAppend(landedBlocks, (void*)(brick)->blocks[i]);
     }
@@ -719,7 +719,7 @@ void BrickLand(Brick *brick, List *landedBlocks) {
 }
 
 
-void BrickDraw(Brick *brick, List *landedBlocks) {
+void BrickDraw(Brick* brick, List* landedBlocks) {
 
     if(IsKeyPressed(KEY_LEFT)) _BrickMoveLeft(brick, landedBlocks);
     else if(IsKeyPressed(KEY_RIGHT)) _BrickMoveRight(brick, landedBlocks);

@@ -1,6 +1,5 @@
 #include <time.h>
 #include <stdlib.h>
-
 #include "common.h"
 #include "list.h"
 #include "stack.h"
@@ -13,8 +12,8 @@
 #define FALL_TIME_UNIT_INTERVAL(x)     (clock_t)(CLOCKS_PER_SEC / x)
 
 
-Game *GameCreate(void) {
-    Game *newGame = (Game*)malloc(sizeof(Game));
+Game* GameCreate(void) {
+    Game* newGame = (Game*)malloc(sizeof(Game));
     newGame->activeBrick = (void*)BrickCreate(L_BRICK, 0, (int)(GRID_VERTICAL_LINE_QUANTITY / 2), 2, BRICK_COLORS[0]);
     newGame->brickFallSpeed = 1;
     newGame->landedBlocks = CreateList();
@@ -23,19 +22,19 @@ Game *GameCreate(void) {
 }
 
 
-void GameActiveBrickLand(Game *game) {
+void GameActiveBrickLand(Game* game) {
     BrickLand((Brick*)(game->activeBrick), game->landedBlocks);
     game->brickFallSpeed = 1;
     game->activeBrick = (void*)BrickCreate(rand() % 7, rand() % 4, rand() % (GRID_VERTICAL_LINE_QUANTITY - 6) + 3, 2, BRICK_COLORS[rand() % 7]);
 }
 
 
-void GameActiveBrickCollide(Game *game) {
+void GameActiveBrickCollide(Game* game) {
     int i;
     bool isEqualBlockPosX, isEqualBlockBottom;
-    Brick *activeBrick = (Brick*)(game->activeBrick);
-    List *landedBlocks = game->landedBlocks;
-    LNode *walker = landedBlocks->head;
+    Brick* activeBrick = (Brick*)(game->activeBrick);
+    List* landedBlocks = game->landedBlocks;
+    LNode* walker = landedBlocks->head;
     
     if(activeBrick->edges.bottom > 44) GameActiveBrickLand(game);
 
@@ -50,7 +49,7 @@ void GameActiveBrickCollide(Game *game) {
 }
 
 
-clock_t GameUpdate(Game *game, clock_t timeInterval) {
+clock_t GameUpdate(Game* game, clock_t timeInterval) {
     if(IsKeyPressed(KEY_SPACE)) game->brickFallSpeed = 128;
 
     GameActiveBrickCollide(game);
@@ -61,10 +60,10 @@ clock_t GameUpdate(Game *game, clock_t timeInterval) {
     return timeInterval;
 }
 
-void GameDraw(Game *game) {
-    Brick *activeBrick = (Brick*)(game->activeBrick);
-    List *landedBlocks = game->landedBlocks;
-    LNode *walker = landedBlocks->head;
+void GameDraw(Game* game) {
+    Brick* activeBrick = (Brick*)(game->activeBrick);
+    List* landedBlocks = game->landedBlocks;
+    LNode* walker = landedBlocks->head;
 
     BrickDraw(activeBrick, landedBlocks);
     while(walker != NULL) {

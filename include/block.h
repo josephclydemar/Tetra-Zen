@@ -15,10 +15,10 @@ typedef struct {
 } Block;
 
 
-Block *BlockCreate(int posX, int posY, Color color);
-void BlockMoveLeft(Block *block);
-void BlockMoveRight(Block *block);
-void BlockDraw(Block *block);
+Block* BlockCreate(int posX, int posY, Color color);
+void BlockMoveLeft(Block* block);
+void BlockMoveRight(Block* block);
+void BlockDraw(Block* block);
 
 
 #endif

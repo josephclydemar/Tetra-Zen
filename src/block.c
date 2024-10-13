@@ -3,8 +3,8 @@
 #include "block.h"
 
 
-Block *BlockCreate(int posX, int posY, Color color) {
-    Block *newBlock = (Block*)malloc(sizeof(Block));
+Block* BlockCreate(int posX, int posY, Color color) {
+    Block* newBlock = (Block*)malloc(sizeof(Block));
     newBlock->pos.x = posX;
     newBlock->pos.y = posY;
     newBlock->size.x = GRID_CELL_SIZE;
@@ -24,15 +24,15 @@ Block *BlockCreate(int posX, int posY, Color color) {
     return newBlock;
 }
 
-void BlockMoveLeft(Block *block) {
+void BlockMoveLeft(Block* block) {
     block->pos.x -= GRID_CELL_SIZE;
 }
 
-void BlockMoveRight(Block *block) {
+void BlockMoveRight(Block* block) {
     block->pos.x += GRID_CELL_SIZE;
 }
 
-void BlockDraw(Block *block) {
+void BlockDraw(Block* block) {
     block->highlight[0].x = block->pos.x * GRID_CELL_SIZE + 2 + GRID_START_POS_X;
     block->highlight[0].y = (block->pos.y + 1) * GRID_CELL_SIZE - 2 + GRID_START_POS_Y;
 

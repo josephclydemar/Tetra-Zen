@@ -3,38 +3,38 @@
 #include <stdio.h>
 #include "list.h"
 
-LNode *CreateLNode(int id, void *item) {
-    LNode *newLNode = (LNode*)malloc(sizeof(LNode));
+LNode* CreateLNode(int id, void* item) {
+    LNode* newLNode = (LNode*)malloc(sizeof(LNode));
     newLNode->id = id;
     newLNode->data = item;
     newLNode->next = NULL;
     return newLNode;
 }
 
-List *CreateList(void) {
-    List *newList = (List*)malloc(sizeof(List));
+List* CreateList(void) {
+    List* newList = (List*)malloc(sizeof(List));
     newList->head = NULL;
     newList->tail = NULL;
     newList->count = 0;
     return newList;
 }
 
-bool ListAppend(List *list, void *item) {
+bool ListAppend(List* list, void* item) {
     if(list->count == 0 && list->head == NULL && list->tail == NULL) {
-        LNode *newLNode = CreateLNode(0, item);
+        LNode* newLNode = CreateLNode(0, item);
         list->head = newLNode;
         list->tail = newLNode;
         list->count++;
     }
 
-    LNode *newLNode = CreateLNode(list->count, item);
+    LNode* newLNode = CreateLNode(list->count, item);
     list->tail->next = newLNode;
     list->tail = list->tail->next;
     list->count++;
     return true;
 }
 
-void *ListRemove(List *list, int id) {
+void* ListRemove(List* list, int id) {
     if(id < 0) return NULL;
     if(list->head == NULL) return NULL;
     if(id > list->count - 1) return NULL;
@@ -43,9 +43,9 @@ void *ListRemove(List *list, int id) {
         return NULL;
     }
     
-    void *data;
-    LNode *walker = list->head;
-    LNode *lnodeToRemove;
+    void* data;
+    LNode* walker = list->head;
+    LNode* lnodeToRemove;
 
     if(list->count == 1) {
         data = walker->data;
@@ -85,7 +85,7 @@ void *ListRemove(List *list, int id) {
     return NULL;
 }
 
-void *ListSearch(List *list, int id) {
+void* ListSearch(List* list, int id) {
     if(id < 0) {
         return NULL;
     }
@@ -96,21 +96,21 @@ void *ListSearch(List *list, int id) {
         return list->tail->data;
     }
 
-    LNode *walker = list->head;
+    LNode* walker = list->head;
     for(int i = 0; i < id; i++) {
         walker = walker->next;
     }
     return walker->data;
 }
 
-void ListTraverse(List *list, int data_type, char *caption) {
+void ListTraverse(List* list, int data_type, char* caption) {
     printf("\nLIST [count %3d]: %s\n", list->count, caption);
     if(list->head == NULL) {
         printf("EMPTY LIST\n");
         return;
     }
 
-    LNode *walker = list->head;
+    LNode* walker = list->head;
     while(walker != NULL) {
         switch(data_type) {
             case 0:
